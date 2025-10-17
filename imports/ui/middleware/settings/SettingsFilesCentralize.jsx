@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Toaster } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-import Index from '../../pages/settings/billing';
+import Index from '../../pages/settings/files';
 import Lottie from 'lottie-react';
 import { PATHS } from '../../paths';
 
@@ -214,31 +214,30 @@ export default function SettingsFilesCentralize() {
 
     // SIDEBAR
     const sidebarEnhancements = {
-        '[tmq="tmq-0005"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.home) } },
-        '[tmq="tmq-0006"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.messaging) } },
-        '[tmq="tmq-0007"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.dashboard) } },
-        '[tmq="tmq-0008"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.contacts) } },
-        '[tmq="tmq-0009"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.buzzBuilderHub) } },
-        '[tmq="tmq-0010"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.attractShoppers) } },
-        '[tmq="tmq-0011"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.convertBuyers) } },
-        '[tmq="tmq-0012"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.buildLoyalty) } },
-        '[tmq="tmq-0013"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.contentLibrary) } },
-        '[tmq="tmq-0014"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.policies) } },
-        '[tmq="tmq-0015"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.objectionFeed) } },
-        '[tmq="tmq-0016"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.account) } },
-        '[tmq="tmq-0017"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.billing) } },
-        '[tmq="tmq-0018"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.assistant) } },
-        '[tmq="tmq-0019"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.phoneNumbers) } },
-        '[tmq="tmq-0020"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.tools) } },
-        '[tmq="tmq-0021"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.files) } },
-        '[tmq="tmq-0022"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.customerMemoryCenter) } },
-        '[tmq="tmq-0023"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.knowledgeBase) } },
-        '[tmq="tmq-0024"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.widgetConfiguration) } },
-        '[tmq="tmq-0025"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.dataEnrichment) } },
-        '[tmq="tmq-0026"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.admin) } },
-        '[tmq="tmq-0027"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.webCrawl) } },
+        '[tmq="tmq-0008"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.home) } },
+        '[tmq="tmq-0009"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.messaging) } },
+        '[tmq="tmq-0010"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.dashboard) } },
+        '[tmq="tmq-0011"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.contacts) } },
+        '[tmq="tmq-0012"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.buzzBuilderHub) } },
+        '[tmq="tmq-0013"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.attractShoppers) } },
+        '[tmq="tmq-0014"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.convertBuyers) } },
+        '[tmq="tmq-0015"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.buildLoyalty) } },
+        '[tmq="tmq-0016"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.contentLibrary) } },
+        '[tmq="tmq-0017"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.policies) } },
+        '[tmq="tmq-0018"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.objectionFeed) } },
+        '[tmq="tmq-0019"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.account) } },
+        '[tmq="tmq-0020"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.billing) } },
+        '[tmq="tmq-0021"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.assistant) } },
+        '[tmq="tmq-0022"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.phoneNumbers) } },
+        '[tmq="tmq-0023"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.tools) } },
+        '[tmq="tmq-0024"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.files) } },
+        '[tmq="tmq-0025"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.journey.customerMemoryCenter) } },
+        '[tmq="tmq-0026"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.knowledgeBase) } },
+        '[tmq="tmq-0027"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.widgetConfiguration) } },
+        '[tmq="tmq-0028"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.settings.dataEnrichment) } },
+        '[tmq="tmq-0029"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.admin) } },
+        '[tmq="tmq-0030"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.webCrawl) } },
     };
-
 
     const enhancements = {
         ...animationsEnhancements,
