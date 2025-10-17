@@ -32,6 +32,7 @@
     "billing-client": "^2.0.4",
     "connect-route": "^0.1.5",
     "info-finder-client": "^1.0.1",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.536.0",
     "meteor-node-stubs": "^1.2.5",
     "moment": "^2.30.1",
