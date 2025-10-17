@@ -1,9 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Toaster } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Index from '../../pages/settings/assistant';
 import Lottie from 'lottie-react';
 import { PATHS } from '../../paths';
+import { useWatcher } from '../../../api/client/Watcher2';
+import ToolsWatcher from '../../../api/client/watchers/vapi/ToolsWatcher';
+import { ASSISTANT, VOICE_KEYS } from '../../../api/common/assistantConst';
+import AssistantWatcher from '../../../api/client/watchers/vapi/AssistantWatcher';
+import KnowledgeBaseWatcher from '../../../api/client/watchers/KnowledgeBaseWatcher';
+import Loader from '../../pages/custom/Loader';
+import ListitemassistantItem from '../../pages/custom/ListitemassistantItem';
 
 function DeepEnhancer({ component: Component, enhancements }) {
     const interceptRender = (element) => {
@@ -85,6 +92,163 @@ function DeepEnhancer({ component: Component, enhancements }) {
 export default function SettingsAssistantCentralize() {
     // WATCHERS
     const navigate = useNavigate();
+
+    const watcher = useRef(AssistantWatcher).current;
+    const kbWatcher = useRef(KnowledgeBaseWatcher).current;
+    const [kbList, setKbList] = useState([]);
+    const [chatOpen, setChatOpen] = useState(false);
+    const [selectedKb, setSelectedKb] = useState(null);
+    const [selectedVoice, setSelectedVoice] = useState(null);
+    const location = useLocation();
+
+    useWatcher(watcher);
+    useWatcher(kbWatcher);
+
+    const chatRef = useRef(null);
+    const [newMessage, setNewMessage] = useState("");
+    const [formData, setFormData] = useState({
+        name: ''
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    useEffect(() => {
+        if (location.state?.openModal) {
+            watcher.setValue(ASSISTANT.IS_ASSISTANT_POPUP_OPEN, true);
+        }
+    }, [location.state]);
+
+    const isAssistantSectionOpen = watcher.getValue("isAssistantSectionOpen");
+    // const selectedAssistant = watcher.getValue(ASSISTANT.SELECTED_ASSISTANT);
+    const selectedAssistantDB = watcher.getValue("dbAssistant");
+
+    const isLoading = watcher.getValue("isLoadingAssistants");
+    const assistants = watcher.Assistants;
+    const isCallActive = watcher.getValue('callActive');
+    const isLoadingCall = watcher.getValue('isCallLoading');
+    const voiceList = watcher.Voices;
+    const selectedAssistant = watcher.getSelectedAssistant();
+    const knowledgeBaseList = kbWatcher.Data;
+    const isAssistantPopupOpen = watcher.getValue(ASSISTANT.IS_ASSISTANT_POPUP_OPEN);
+    const isChatOpen = watcher.getValue('isChatOpen');
+    const chats = watcher.getValue("chats") || [];
+
+    useEffect(() => {
+        watcher.setValue("isLoadingAssistants", true);
+        watcher.listen();
+        watcher.fetchAllAssistants();
+        watcher.fetchVoices();
+        fetchAllTools();
+        fetchKbList();
+        return () => {
+            watcher.clear();
+            watcher.removeListener();
+            watcher.endCall();
+        };
+    }, []);
+
+
+    const handleScroll = (e) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.target;
+        // If we're near the bottom (within 20px) and not currently loading
+        if (scrollHeight - scrollTop - clientHeight < 20 && !isLoading) {
+            watcher.fetchAllAssistants({ isLoadmore: true });
+        }
+    };
+
+    const fetchKbList = async () => {
+        await kbWatcher.fetchKnowledgeBase();
+        const res = kbWatcher.Data;
+        setKbList(res);
+    };
+
+    const fetchVoice = async () => {
+        if (voiceList && voiceList.length > 0) {
+            const matchingVoice = voiceList.find(voice => voice.voiceid === selectedAssistantDB.voice);
+            if (matchingVoice) {
+                setSelectedVoice(matchingVoice.voiceid);
+                watcher.setValue("assistantVoice", matchingVoice);
+            } else {
+                setSelectedVoice(voiceList[0].voiceid);
+                watcher.setValue("assistantVoice", voiceList[0]);
+            }
+        }
+    };
+
+    const fetchAllTools = async () => {
+        setIsLoadingTools(true);
+        await toolsWatcher.fetchAllTools();
+        setIsLoadingTools(false);
+    };
+
+    const handleKbChange = (e) => {
+        setSelectedKb(e.target.value);
+        watcher.setAssistantConfig(ASSISTANT.KNOWLEDGE_BASE, e.target.value);
+    };
+
+    const handleVoiceChange = (e) => {
+        setSelectedVoice(e.target.value);
+        const matchingVoice = voiceList.find(voice => voice.voiceid === e.target.value);
+        watcher.setValue("assistantVoice", matchingVoice);
+        watcher.setAssistantConfig(ASSISTANT.VOICE_CONFIGURATION, VOICE_KEYS.VOICE_ID, matchingVoice.voiceid);
+    };
+
+    //---------------Tools-------------------//
+
+    const toolsWatcher = useRef(ToolsWatcher).current;
+    const [selectedTools, setSelectedTools] = useState([]);
+    const [isLoadingTools, setIsLoadingTools] = useState(false);
+    useWatcher(toolsWatcher);
+    const tools = toolsWatcher.Tools;
+
+    const assistantTools = watcher.getValue("selectedTools") || [];
+
+    // Update selected tools when selectedAssistant changes
+    useEffect(() => {
+        if (selectedAssistantDB && selectedAssistantDB.toolidsList) {
+            setSelectedTools(selectedAssistantDB.toolidsList);
+            const selectedToolObjects = tools.filter(tool => selectedAssistantDB.toolidsList.includes(tool.id));
+            watcher.setValue("selectedTools", selectedToolObjects);
+        }
+    }, [isLoadingTools]);
+
+    const handleToolChange = (event) => {
+        const selectedIds = Array.from(event.target.selectedOptions, option => option.value);
+        setSelectedTools(selectedIds);
+        const selectedToolObjects = tools.filter(tool => selectedIds.includes(tool.id));
+        watcher.setAssistantConfig(ASSISTANT.TOOLS, selectedToolObjects);
+    };
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await watcher.createAssistant(formData);
+        watcher.setValue(ASSISTANT.IS_ASSISTANT_POPUP_OPEN, false);
+    };
+
+    useEffect(() => {
+        if (chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+    }, [chats]);
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSendMessage();
+        }
+    };
+    const handleSendMessage = () => {
+        watcher.handleSendChat(newMessage);
+        setNewMessage(""); // Clear the input field after sending
+    };
+
+
 
     // ANIMATIONS
     const [lottieData0, setLottieData0] = useState(null);
@@ -239,9 +403,176 @@ export default function SettingsAssistantCentralize() {
         '[tmq="tmq-0057"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.webCrawl) } },
     };
 
+    // ASSISTANT SIDEBAR
+    const assistantSidebarEnhancements = {
+        '[data-w-id="afafd7a2-890e-f397-22fe-a3f2fc28385d"]': {
+            href: "",
+            onClick: (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                watcher.setValue(ASSISTANT.IS_ASSISTANT_POPUP_OPEN, true)
+            }
+        },
+        '[tmq="tmq-0060"]': {
+            style: { display: isAssistantPopupOpen ? "flex" : "none" },
+            children: watcher.getValue("isLoadingCreate") ? <Loader /> : <div className={'popup-card _w-50'}>
+                <div className={'card-settings-hd-div'}>
+                    <div className={'card-settings-hd'}>{'Create Assistant'}</div>
+                </div>
+                <div className={'w-form'}>
+                    <form
+                        id={'email-form'}
+                        name={'email-form'}
+                        data-name={'Email Form'}
+                        method={'get'}
+                        data-wf-page-id={'688b61ee631f6165f14725b5'}
+                        data-wf-element-id={'dd817661-5700-ca78-940f-32045820c7b8'}
+                        onSubmit={handleSubmit}
+                    >
+                        <div className={'form-body'}>
+                            <div className={'form-row'}>
+                                <input
+                                    className={'inbox-search w-input'}
+                                    maxlength={'256'}
+                                    name={'name'}
+                                    data-name={'Field 3'}
+                                    placeholder={'Create a name for your assistant'}
+                                    type={'text'}
+                                    id={'name'}
+                                    required
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className={'notice-div'}>
+                                <div className={'notice-icon'}>
+                                    <img
+                                        src={'../images/smarties-alert-circle.svg'}
+                                        loading={'lazy'}
+                                        alt={''}
+                                    />
+                                </div>
+                                <div className={'notice-text'}>
+                                    {
+                                        'You can create multiple assistants, each with its own unique configuration and capabilities.'
+                                    }
+                                </div>
+                            </div>
+                            <div className={'form-btn-container mb-20'}>
+                                <a href={'#'} className={'btn-style1 outline'} onClick={() => watcher.setValue(ASSISTANT.IS_ASSISTANT_POPUP_OPEN, false)}>
+                                    <div>{'Cancel'}</div>
+                                </a>
+                                <button href={'#'} className={'btn-style1'} type='submit'>
+                                    <div>{'Create'}</div>
+                                </button>
+                            </div>
+                            <div className={'notice-div bg-blue'}>
+                                <div className={'notice-icon'}>
+                                    <img
+                                        src={'../images/smarties-alert-circle-blue.svg'}
+                                        loading={'lazy'}
+                                        alt={''}
+                                    />
+                                </div>
+                                <div className={'notice-text'}>
+                                    {
+                                        'After creating your assistant, you can configure its model, voice, tools, and other settings in the assistant configuration panel.'
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div
+                    data-w-id={'dd817661-5700-ca78-940f-32045820c7d3'}
+                    className={'popup-close'}
+                    onClick={() => watcher.setValue(ASSISTANT.IS_ASSISTANT_POPUP_OPEN, false)}
+                >
+                    <img src={'../images/smarties-x.svg'} loading={'lazy'} alt={''} />
+                </div>
+            </div>
+        },
+        '.email-form': {
+            onSubmit: handleSubmit,
+            children: <div className={'form-body'}>
+                <div className={'form-row'}>
+                    <input
+                        className={'inbox-search w-input'}
+                        maxlength={'256'}
+                        name={'name'}
+                        data-name={'Field 3'}
+                        placeholder={'Create a name for your assistant'}
+                        type={'text'}
+                        id={'name'}
+                        required
+                        value={formData.name}
+                        onChange={handleInputChange}
+                    />
+                </div>
+                <div className={'notice-div'}>
+                    <div className={'notice-icon'}>
+                        <img
+                            src={'../images/smarties-alert-circle.svg'}
+                            loading={'lazy'}
+                            alt={''}
+                        />
+                    </div>
+                    <div className={'notice-text'}>
+                        {
+                            'You can create multiple assistants, each with its own unique configuration and capabilities.'
+                        }
+                    </div>
+                </div>
+                <div className={'form-btn-container mb-20'}>
+                    <a href={'#'} className={'btn-style1 outline'} onClick={() => watcher.setValue(ASSISTANT.IS_ASSISTANT_POPUP_OPEN, false)}>
+                        <div>{'Cancel'}</div>
+                    </a>
+                    <button href={'#'} className={'btn-style1'} type='submit'>
+                        <div>{'Create'}</div>
+                    </button>
+                </div>
+                <div className={'notice-div bg-blue'}>
+                    <div className={'notice-icon'}>
+                        <img
+                            src={'../images/smarties-alert-circle-blue.svg'}
+                            loading={'lazy'}
+                            alt={''}
+                        />
+                    </div>
+                    <div className={'notice-text'}>
+                        {
+                            'After creating your assistant, you can configure its model, voice, tools, and other settings in the assistant configuration panel.'
+                        }
+                    </div>
+                </div>
+            </div>
+        },
+        '.list-assistant': {
+            style: { maxHeight: 'calc(100vh - 200px)', overflowY: 'auto', padding: '10px', scrollBehavior: 'smooth' },
+            onScroll: handleScroll,
+            children: isLoading ? <Loader /> : (
+                assistants.length ? assistants.map((assistant) => (
+                    <ListitemassistantItem key={assistant.id} assistant={assistant} onClick={() => {
+                        setChatOpen(false);
+                        watcher.ChatBot.reset();
+                    }} />
+                )) : "No assistants found"
+            )
+        }
+    };
+
+    // ASSISTANT MAIN PANEL
+    const assistantMainPanelEnhancements = {
+        '.assistant-content': {
+            style: { display: selectedAssistant ? "flex" : "none" }
+        }
+    };
+
     const enhancements = {
         ...animationsEnhancements,
-        ...sidebarEnhancements
+        ...sidebarEnhancements,
+        ...assistantSidebarEnhancements,
+        ...assistantMainPanelEnhancements
     };
 
     return (
