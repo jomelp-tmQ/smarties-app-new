@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package tmq;
+
+import "google/protobuf/any.proto";
+import "tmq/inbox.proto"; // Reuse InboxIds and Pagination
+
+// Key-value attribute for attachment
+message AttachmentAttribute {
+  string key = 1;
+  google.protobuf.Any value = 2;
+}
+
+// Attachment entity mirrors server schema
+message Attachment {
+  string id = 1;                 // MongoDB _id as string
+  string business_id = 2;        // ObjectId as string
+  string inbox_id = 3;           // ObjectId as string
+  string interaction_id = 4;     // ObjectId as string
+  string consumer_id = 5;        // ObjectId as string
+  string channel_id = 6;         // ObjectId as string
+  string original_name = 7;      // Original filename
+  double file_size = 8;          // in bytes
+  string mime_type = 9;          // MIME type
+  string file_extension = 10;    // e.g. .png
+  string local_path = 11;        // server path (optional)
+  string local_url = 12;         // internal URL (optional)
+  string remote_url = 13;        // external URL (optional)
+  string source = 14;            // e.g., api_upload, webhook_download
+  string recording_id = 15;      // Recording ID for audio/video files
+  double created_at = 16;        // Timestamp as double
+  repeated AttachmentAttribute attributes = 17; // Extra metadata
+  string thumbnail_url = 18;     // optional
+}
+
+// Request: list attachments across multiple inboxes with pagination
+message GetAttachmentsByInboxIdsRequest {
+  repeated InboxIds inbox_ids = 1; // setInboxIds(id)
+  Pagination page = 2;             // optional pagination cursor
+}
+
+// Response: attachment list with pagination cursor
+message GetAttachmentsResponse {
+  repeated Attachment attachments = 1;
+  int32 total_count = 2;
+  bool success = 3;
+  string error_message = 4;
+  // Cursor for next page; corresponds to the last item's created_at
+  double last_basis = 5; // 0/unset => no further pages
+}
+
+service AttachmentService {
+  // Fetch attachments belonging to any of the provided inbox IDs, merged and ordered by created_at desc.
+  rpc GetAttachmentsByInboxIds(GetAttachmentsByInboxIdsRequest) returns (GetAttachmentsResponse);
+  // Soft-delete an attachment by id (sets deletedAt and emits RedisVent remove)
+  rpc DeleteAttachment(DeleteAttachmentRequest) returns (DeleteAttachmentResponse);
+}
+
+// Soft-delete an attachment by id (adds deletedAt on the record)
+message DeleteAttachmentRequest {
+  string attachment_id = 1; // required
+}
+
+message DeleteAttachmentResponse {
+  bool success = 1;
+  string error_message = 2;
+}
+
+

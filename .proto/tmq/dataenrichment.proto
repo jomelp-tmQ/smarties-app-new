@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package tmq;
+
+message DataEnrichmentRequest {
+  string business_id = 1;
+  string consumer_id = 2;
+}
+
+message DataEnrichmentResponse {
+}
+
+service DataEnrichmentService {
+  rpc FetchDataEnrichment(DataEnrichmentRequest) returns (DataEnrichmentResponse);
+  rpc ProcessDataEnrichment(DataEnrichmentRequest) returns (DataEnrichmentResponse);
+}
+
+

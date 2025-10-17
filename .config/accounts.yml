@@ -1,0 +1,58 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#      _____ __  __  ___    ____  _______     __      #
+#     |_   _|  \/  |/ _ \  |  _ \| ____\ \   / /      #
+#       | | | |\/| | | | | | | | |  _|  \ \ / /       #
+#       | | | |  | | |_| | | |_| | |___  \ V /        #
+#       |_| |_|  |_|\__\_\ |____/|_____|  \_/         #
+#                                                     #
+#             Accounts Configuration File             #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Configuration for accounts
+# Client Login Configuration
+  # minPasswordLen: Minimum password length (default 8)
+  # maxPasswordLen: Maximum password length (default 34)
+client:
+  minPasswordLen: 8
+  maxPasswordLen: 34
+  # Profile Configuration
+  # profile: List of extra profile fields (do not use "settings" as key it will be used for custom settings)
+  profile: [
+    {label: "Address 2", key: "address2"},
+    {label: "Nick Name", key: "nickName"}
+  ]
+  # Profile Custom Settings
+  settings:
+    theme: 
+      default: "default"
+      type: "options"
+      options:
+        - {label: "Dark", value: "dark"}
+        - {label: "Light", value: "light"}
+        - {label: "System Default", value: "default"}
+    # Other sample options
+    # color:
+    #   default: "#007bff"
+    #   type: "string"
+    # privacy:
+    #   default: true 
+    #   type: "boolean"
+    # fontSize:
+    #   default: 14
+    #   type: "number"
+    #   min: 12
+    #   max: 24
+
+# Sign up verification
+  # enabled: Enable or disable sign up verification
+  # type: Verification type if will send "link" or "code" through email
+accountVerification:
+  enabled: false
+  type: "link"
+  # code: Configuration for code verification
+    # length: Length of the code (default 6)
+    # expiration: Expiration time of the code in seconds (default 86400 mins or 1 day)
+  code: 
+    length: 6,
+    expiration: 86400
+    

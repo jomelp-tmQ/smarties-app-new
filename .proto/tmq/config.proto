@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package tmq;
+
+// Top-level configuration matching the desired JSON structure
+// {
+//   "client": {
+//     "smartiesAssistant": { "isHumanUrl": "..." }
+//   },
+//   "auth": { "username": "tmq", "password": "P@ssword1" }
+// }
+
+// Smarties Assistant specific client configuration
+message SmartiesAssistantConfig {
+  // e.g., "https://n8n.example.com/webhook/..."
+  string is_human_url = 1;
+}
+
+message SuggestionConfig {
+  string url = 1;
+  int32 min = 2;
+  int32 max = 3;
+}
+
+// Client-side configuration container
+message ClientConfig {
+  SmartiesAssistantConfig smarties_assistant = 1;
+  SuggestionConfig suggestion = 2;
+}
+
+// Basic authentication configuration
+message AuthConfig {
+  string username = 1;
+  string password = 2;
+}
+
+message PredefinedConfig {
+  string serverUrl = 1;
+  string apiKey = 2;
+  string refreshEndpoint = 3;
+}
+
+message LiveKit {
+  string serverUrl = 1;
+}
+
+// Root config object
+message Config {
+  ClientConfig client = 1;
+  AuthConfig auth = 2;
+  PredefinedConfig predefined = 3;
+  LiveKit livekit = 4;
+}
+
+// Request/response messages for ConfigService
+message GetClientConfigRequest {}
+
+message GetClientConfigResponse {
+  Config config = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+service ConfigService {
+  // Returns client-side configuration
+  rpc GetClientConfig (GetClientConfigRequest) returns (GetClientConfigResponse);
+}

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package tmq;
+
+// 2 Send outbound message (equivalent to POST /api/b/:slug/channels/messages/outbound)
+message SendMessageRequest {
+  string business_slug = 1; // required
+  string provider = 2;      // e.g., "smarty"
+  string type = 3;          // e.g., "chat" | "call"
+  string from = 4;
+  string inbox_id = 5;     // preferred: derive destination from inbox -> consumer.externalId
+  string text = 6;
+  map<string, string> meta = 7; // flattened metadata
+  string business_id = 8;  // prefer business_id; business_slug kept for backward-compat
+}
+
+message SendMessageResponse {
+  bool success = 1;
+  string error_message = 2;
+}
+
+// 4 Fetch suggestions (equivalent to POST suggestion service)
+message FetchSuggestionsRequest {
+  string url = 1;             // suggestion endpoint URL
+  string username = 2;        // for Basic auth
+  string password = 3;        // for Basic auth
+  string query = 4;           // input text
+  int32 min = 5;              // optional
+  int32 max = 6;              // optional
+}
+
+message FetchSuggestionsResponse {
+  bool success = 1;
+  string error_message = 2;
+  repeated string suggestions = 3;
+}
+
+service ApiService {
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+  rpc FetchSuggestions(FetchSuggestionsRequest) returns (FetchSuggestionsResponse);
+}
+

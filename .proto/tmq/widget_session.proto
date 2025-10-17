@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+message WidgetTokenRequest {
+}
+
+message WidgetTokenResponse {
+  bool success = 1;
+  string oneTimeToken = 2;
+  string csrfToken = 3;
+  string error = 4;
+}
+
+message ChatMessageRequest {
+  string message = 1;
+  string sessionId = 2;
+  string room = 3;
+  string type = 4; // e.g. "chat" or "call"
+  string transcriptId = 5;
+  bool isCallEnded = 6;
+  string recordingId = 7;
+  bool isUpdate = 8;
+  // Client-provided page/session identifier for meta (changes per refresh)
+  string metaSessionId = 9;
+  // Optional JSON-encoded metadata (device, lang, tz, ua, asn, etc.)
+  string meta = 10;
+  string assistantId = 11;
+  string businessId = 12;
+}
+
+message ChatMessageResponse {
+  bool success = 1;
+  string response = 2;
+  string error = 3;
+}
+
+service WidgetSessionService {
+  // Acquire secure tokens server-side (no exposure on client)
+  rpc GetWidgetTokens(WidgetTokenRequest) returns (WidgetTokenResponse) {}
+
+  // Proxy the widget chat endpoint (public chat)
+  rpc SendChatMessage(ChatMessageRequest) returns (ChatMessageResponse) {}
+
+  // Proxy outbound assistant messages (call transcripts etc.)
+  rpc SendOutboundMessage(ChatMessageRequest) returns (ChatMessageResponse) {}
+
+  // Proxy inbound user messages (call transcripts etc.)
+  rpc SendInboundMessage(ChatMessageRequest) returns (ChatMessageResponse) {}
+}
+
+

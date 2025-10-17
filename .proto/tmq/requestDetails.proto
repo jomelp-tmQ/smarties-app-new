@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+
+message RequestDetailsRequest {
+}
+
+message RequestDetailsResponse {
+    bool success = 1;
+    string returnUrl = 2;
+    string appUrl = 3;
+    string appName = 4;
+    string cancelUrl = 5;
+    string checkOutUrl = 6;
+    string sessionStatusUrl = 7;
+    string stripePublicKey = 8;
+    string portalUrl = 9;
+    string priceId = 10;
+}
+
+service RequestDetailsService {
+    rpc fetchRequestDetails (RequestDetailsRequest) returns (RequestDetailsResponse) {}
+}

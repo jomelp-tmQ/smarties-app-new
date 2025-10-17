@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+import "tmq/common.proto";
+import "google/protobuf/struct.proto";
+
+package tmq;
+
+message CrawlRequest {
+    string userId = 1;
+    string url = 2;
+    int32 depth = 3;
+    int32 max_pages = 4;
+}
+
+message Crawl {
+  string id = 1;
+  string url = 2;
+  string created_at = 3;
+  string updated_at = 4;
+  string user_id = 5;
+  string depth = 6;
+  string max_pages = 7;
+  string status = 8;
+}
+
+message CrawlPages {
+  string id = 1;
+  string crawl_id = 2;
+  string url = 3;
+  string title = 4;
+  string status = 5;
+  string error = 6;
+  string created_at = 7;
+  string updated_at = 8;
+  string user_id = 9;
+  bool active = 10;
+  google.protobuf.Struct metadata = 11;
+  string file_id = 12;
+}
+
+message FetchCrawlRequestsRequest {
+  string userId = 1;
+  string searchQuery = 2;
+  int64 lastBasis = 3;
+}
+
+message FetchCrawlRequestsResponse {
+  repeated Crawl crawlRequests = 1;
+  int64 lastBasis = 2;
+}
+
+message FetchCrawlPagesRequest {
+  string userId = 1;
+  string crawlId = 2;
+  string searchQuery = 3;
+  int64 lastBasis = 4;
+}
+
+message FetchCrawlPagesResponse {
+  repeated CrawlPages crawlPages = 1;
+  int64 lastBasis = 2;
+  string errorMessage = 3;
+}
+
+message UpdateCrawlPagesRequest {
+  string userId = 1;
+  string id = 2;
+  bool active = 3;
+}
+
+service CrawlService {
+  rpc Crawl (CrawlRequest) returns (DefaultResponse) {}
+  rpc fetchCrawlRequests (FetchCrawlRequestsRequest) returns (FetchCrawlRequestsResponse) {}
+  rpc fetchCrawlPages (FetchCrawlPagesRequest) returns (FetchCrawlPagesResponse) {}
+  rpc updateCrawlPages (UpdateCrawlPagesRequest) returns (DefaultResponse) {}
+}

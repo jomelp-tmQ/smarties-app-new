@@ -1,0 +1,349 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+// Stripe Connect Messages
+message ConnectUrlRequest {
+  string userId = 1;
+}
+
+message ConnectUrlResponse {
+  bool success = 1;
+  string message = 2;
+  bytes oauth = 3;
+}
+
+// Customer Management Messages
+message CustomerRequest {
+  string email = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string phone = 4;
+  BillingAddress billingAddress = 5;
+  string userId = 6;
+  bytes metadata = 7;
+}
+
+message CustomerResponse {
+  bool success = 1;
+  string message = 2;
+  CustomerData customer = 3;
+}
+
+message CustomerData {
+  string id = 1;
+  string stripeCustomerId = 2;
+  string email = 3;
+  string firstName = 4;
+  string lastName = 5;
+  string phone = 6;
+  BillingAddress billingAddress = 7;
+  string status = 8;
+  uint64 createdAt = 9;
+  uint64 updatedAt = 10;
+}
+
+message BillingAddress {
+  string line1 = 1;
+  string line2 = 2;
+  string city = 3;
+  string state = 4;
+  string postalCode = 5;
+  string country = 6;
+}
+
+message UpdateCustomerRequest {
+  string customerId = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string phone = 4;
+  BillingAddress billingAddress = 5;
+  string status = 6;
+  bytes metadata = 7;
+}
+
+message GetCustomerRequest {
+  string customerId = 1;
+}
+
+message ListCustomersRequest {
+  CustomerFilters filters = 1;
+}
+
+message CustomerFilters {
+  string status = 1;
+  string userId = 2;
+}
+
+message ListCustomersResponse {
+  repeated CustomerData customers = 1;
+  int32 count = 2;
+  string message = 3;
+}
+
+// Discount Code Messages
+message DiscountCodeRequest {
+  string name = 1;
+  string code = 2;
+  string type = 3;
+  double value = 4;
+  string currency = 5;
+  int32 maxUses = 6;
+  uint64 expiresAt = 7;
+  double minimumAmount = 8;
+  string userId = 9;
+  bytes metadata = 10;
+}
+
+message DiscountCodeResponse {
+  bool success = 1;
+  string message = 2;
+  DiscountCodeData discount = 3;
+}
+
+message DiscountCodeData {
+  string id = 1;
+  string discountId = 2;
+  string name = 3;
+  string code = 4;
+  string type = 5;
+  double value = 6;
+  string currency = 7;
+  int32 maxUses = 8;
+  int32 currentUses = 9;
+  uint64 expiresAt = 10;
+  double minimumAmount = 11;
+  bool isActive = 12;
+  uint64 createdAt = 13;
+  uint64 updatedAt = 14;
+}
+
+message UpdateDiscountCodeRequest {
+  string discountId = 1;
+  string name = 2;
+  string type = 3;
+  double value = 4;
+  string currency = 5;
+  int32 maxUses = 6;
+  uint64 expiresAt = 7;
+  double minimumAmount = 8;
+  bool isActive = 9;
+  bytes metadata = 10;
+}
+
+message GetDiscountCodeRequest {
+  string discountId = 1;
+}
+
+message ListDiscountCodesRequest {
+  DiscountCodeFilters filters = 1;
+}
+
+message DiscountCodeFilters {
+  bool isActive = 1;
+  string createdBy = 2;
+}
+
+message ListDiscountCodesResponse {
+  repeated DiscountCodeData discounts = 1;
+  int32 count = 2;
+  string message = 3;
+}
+
+// Invoice Messages
+message InvoiceRequest {
+  string customerId = 1;
+  repeated Product products = 2;
+  double totalAmount = 3;
+  string currency = 4;
+  string discountCode = 5;
+  double discountAmount = 6;
+  double taxAmount = 7;
+  uint64 dueDate = 8;
+  BillingAddress billingAddress = 9;
+  string userId = 10;
+  bytes metadata = 11;
+}
+
+message InvoiceResponse {
+  bool success = 1;
+  string message = 2;
+  InvoiceData invoice = 3;
+}
+
+message InvoiceData {
+  string id = 1;
+  string invoiceId = 2;
+  string invoiceNumber = 3;
+  string customerId = 4;
+  repeated Product products = 5;
+  double subtotalAmount = 6;
+  double totalAmount = 7;
+  string currency = 8;
+  string discountCode = 9;
+  double discountAmount = 10;
+  double taxAmount = 11;
+  uint64 dueDate = 12;
+  string status = 13;
+  string paymentStatus = 14;
+  uint64 createdAt = 15;
+  uint64 updatedAt = 16;
+}
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int32 quantity = 5;
+  string sku = 6;
+}
+
+message UpdateInvoiceRequest {
+  string invoiceId = 1;
+  string status = 2;
+  string paymentStatus = 3;
+  repeated Product products = 4;
+  double subtotalAmount = 5;
+  double totalAmount = 6;
+  double taxAmount = 7;
+}
+
+message GetInvoiceRequest {
+  string invoiceId = 1;
+}
+
+message ListInvoicesRequest {
+  InvoiceFilters filters = 1;
+}
+
+message InvoiceFilters {
+  string customerId = 1;
+  string status = 2;
+  string paymentStatus = 3;
+}
+
+message ListInvoicesResponse {
+  repeated InvoiceData invoices = 1;
+  int32 count = 2;
+  string message = 3;
+}
+
+// Loyalty Points Messages
+message LoyaltyPointsRequest {
+  string customerId = 1;
+  double totalAmount = 2;
+  string orderId = 3;
+  string invoiceId = 4;
+  string transactionId = 5;
+}
+
+message LoyaltyPointsSpendRequest {
+  string customerId = 1;
+  double pointsToSpend = 2;
+  string orderId = 3;
+  string invoiceId = 4;
+  string transactionId = 5;
+}
+
+message LoyaltyPointsResponse {
+  bool success = 1;
+  string message = 2;
+  bytes loyalty = 3;
+}
+
+message CustomerLoyaltyStatusRequest {
+  string customerId = 1;
+}
+
+message CustomerLoyaltyStatusResponse {
+  bool success = 1;
+  string message = 2;
+  bytes loyaltyStatus = 3;
+}
+
+message UpdateLoyaltyPointsRequest {
+  string customerId = 1;
+  double points = 2;
+  string operation = 3;
+  string reason = 4;
+}
+
+// Product Management Messages
+message ProductRequest {
+  string name = 1;
+  string description = 2;
+  double price = 3;
+  string category = 4;
+  string sku = 5;
+  int32 inventory = 6;
+}
+
+message SalesProductResponse {
+  bool success = 1;
+  string message = 2;
+  ProductData product = 3;
+}
+
+message ProductData {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string category = 5;
+  string sku = 6;
+  int32 inventory = 7;
+  uint64 createdAt = 8;
+  uint64 updatedAt = 9;
+}
+
+message UpdateSalesProductRequest {
+  string productId = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  string category = 5;
+  string sku = 6;
+  int32 inventory = 7;
+}
+
+message DeleteSalesProductRequest {
+  string productId = 1;
+}
+
+// Service definition
+service SalesEnablementService {
+  // Stripe Connect
+  rpc connectStripe(ConnectUrlRequest) returns (ConnectUrlResponse) {}
+
+  // Customer Management
+  rpc createCustomer(CustomerRequest) returns (CustomerResponse) {}
+  rpc updateCustomer(UpdateCustomerRequest) returns (CustomerResponse) {}
+  rpc getCustomer(GetCustomerRequest) returns (CustomerResponse) {}
+  rpc listCustomers(ListCustomersRequest) returns (ListCustomersResponse) {}
+  
+  // Discount Code Management
+  rpc createDiscountCode(DiscountCodeRequest) returns (DiscountCodeResponse) {}
+  rpc updateDiscountCode(UpdateDiscountCodeRequest) returns (DiscountCodeResponse) {}
+  rpc getDiscountCode(GetDiscountCodeRequest) returns (DiscountCodeResponse) {}
+  rpc listDiscountCodes(ListDiscountCodesRequest) returns (ListDiscountCodesResponse) {}
+  
+  // Invoice Management
+  rpc createInvoice(InvoiceRequest) returns (InvoiceResponse) {}
+  rpc updateInvoice(UpdateInvoiceRequest) returns (InvoiceResponse) {}
+  rpc getInvoice(GetInvoiceRequest) returns (InvoiceResponse) {}
+  rpc listInvoices(ListInvoicesRequest) returns (ListInvoicesResponse) {}
+  
+  // Loyalty Points
+  rpc createLoyaltyPoints(LoyaltyPointsRequest) returns (LoyaltyPointsResponse) {}
+  rpc getCustomerLoyaltyStatus(CustomerLoyaltyStatusRequest) returns (CustomerLoyaltyStatusResponse) {}
+  rpc updateLoyaltyPoints(UpdateLoyaltyPointsRequest) returns (LoyaltyPointsResponse) {}
+  rpc spendLoyaltyPoints(LoyaltyPointsSpendRequest) returns (LoyaltyPointsResponse) {}
+  
+  // Product Management
+  rpc addProduct(ProductRequest) returns (SalesProductResponse) {}
+  rpc updateProduct(UpdateSalesProductRequest) returns (SalesProductResponse) {}
+  rpc deleteProduct(DeleteSalesProductRequest) returns (SalesProductResponse) {}
+}

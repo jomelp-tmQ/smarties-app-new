@@ -1,0 +1,763 @@
+{
+    "info": {
+        "_postman_id": "smarties-webhook-api-v1",
+        "name": "Smarties API - Webhook Endpoints",
+        "description": "Complete test collection for Smarties webhook API endpoints including inbound and outbound message processing",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "smarties-team"
+    },
+    "auth": {
+        "type": "noauth"
+    },
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "// Set common variables",
+                    "pm.globals.set('baseUrl', pm.variables.get('baseUrl') || 'http://localhost:3000');",
+                    "pm.globals.set('businessSlug', 'smarties-test');",
+                    "",
+                    "// Generate dynamic test data",
+                    "pm.globals.set('timestamp', Date.now());",
+                    "pm.globals.set('sessionId', 'sess_' + Math.random().toString(36).substr(2, 9));",
+                    "pm.globals.set('messageId', 'msg_' + Math.random().toString(36).substr(2, 9));"
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:3000",
+            "type": "string"
+        },
+        {
+            "key": "businessSlug",
+            "value": "smarties-test",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "📥 Inbound Messages",
+            "item": [
+                {
+                    "name": "Inbound - Smarty Chat Message",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status code is 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test('Response has success flag', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "});",
+                                    "",
+                                    "pm.test('Response includes required IDs', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('businessId');",
+                                    "    pm.expect(jsonData).to.have.property('channelId');",
+                                    "    pm.expect(jsonData).to.have.property('consumerId');",
+                                    "    pm.expect(jsonData).to.have.property('inboxId');",
+                                    "    pm.expect(jsonData).to.have.property('interactionId');",
+                                    "});",
+                                    "",
+                                    "// Store IDs for subsequent tests",
+                                    "if (pm.response.code === 200) {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.globals.set('lastBusinessId', jsonData.businessId);",
+                                    "    pm.globals.set('lastChannelId', jsonData.channelId);",
+                                    "    pm.globals.set('lastConsumerId', jsonData.consumerId);",
+                                    "    pm.globals.set('lastInboxId', jsonData.inboxId);",
+                                    "    pm.globals.set('lastInteractionId', jsonData.interactionId);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\",\n  \"type\": \"chat\",\n  \"identifier\": \"smarty-chat-main\",\n  \"from\": \"customer_{{timestamp}}\",\n  \"text\": \"Hello! I need help with my order. This is a test message from Postman.\",\n  \"meta\": {\n    \"customerName\": \"John Doe\",\n    \"userAgent\": \"Mozilla/5.0 (Test Client)\",\n    \"sessionId\": \"{{sessionId}}\",\n    \"messageId\": \"{{messageId}}\",\n    \"timestamp\": \"{{timestamp}}\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Inbound - WhatsApp Message",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('WhatsApp message processed successfully', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"whatsapp\",\n  \"type\": \"messaging\",\n  \"identifier\": \"whatsapp-business\",\n  \"from\": \"+1234567890\",\n  \"text\": \"Hi! I'm contacting you via WhatsApp. Can you help me?\",\n  \"meta\": {\n    \"customerName\": \"Jane Smith\",\n    \"phoneNumber\": \"+1234567890\",\n    \"messageId\": \"wa_{{messageId}}\",\n    \"timestamp\": \"{{timestamp}}\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Inbound - Email Message",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Email message processed successfully', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smtp\",\n  \"type\": \"email\",\n  \"identifier\": \"support-email\",\n  \"from\": \"customer@example.com\",\n  \"text\": \"Subject: Support Request\\n\\nHello,\\n\\nI need assistance with my account. Please contact me at your earliest convenience.\\n\\nBest regards,\\nCustomer\",\n  \"meta\": {\n    \"customerName\": \"Bob Johnson\",\n    \"emailAddress\": \"customer@example.com\",\n    \"subject\": \"Support Request\",\n    \"messageId\": \"email_{{messageId}}\",\n    \"timestamp\": \"{{timestamp}}\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Inbound - Message with Attachments",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Message with attachments processed', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\",\n  \"type\": \"chat\",\n  \"identifier\": \"smarty-chat-main\",\n  \"from\": \"customer_with_files_{{timestamp}}\",\n  \"text\": \"Please find attached documents for review.\",\n  \"attachments\": [\n    \"https://example.com/files/document1.pdf\",\n    \"https://example.com/files/screenshot.png\"\n  ],\n  \"meta\": {\n    \"customerName\": \"Alice Cooper\",\n    \"sessionId\": \"{{sessionId}}\",\n    \"messageId\": \"{{messageId}}\",\n    \"hasAttachments\": true,\n    \"attachmentCount\": 2\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "📤 Outbound Messages",
+            "item": [
+                {
+                    "name": "Outbound - Smarty Chat Response",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Outbound message sent successfully', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test('Response includes provider info', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "    pm.expect(jsonData).to.have.property('provider');",
+                                    "    pm.expect(jsonData).to.have.property('providerResponse');",
+                                    "});",
+                                    "",
+                                    "pm.test('Provider response is mocked correctly', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.providerResponse).to.have.property('providerMessageId');",
+                                    "    pm.expect(jsonData.providerResponse).to.have.property('status');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\",\n  \"type\": \"chat\",\n  \"from\": \"smarty-chat-main\",\n  \"to\": \"customer_{{timestamp}}\",\n  \"text\": \"Thank you for contacting us! We've received your message and will respond shortly. Is there anything specific I can help you with?\",\n  \"meta\": {\n    \"agentId\": \"agent_001\",\n    \"agentName\": \"Support Agent\",\n    \"priority\": \"normal\",\n    \"responseTime\": \"{{timestamp}}\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/outbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "outbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Outbound - WhatsApp Response",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('WhatsApp outbound sent successfully', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "    pm.expect(jsonData.provider).to.eql('whatsapp');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"whatsapp\",\n  \"type\": \"messaging\",\n  \"from\": \"whatsapp-business\",\n  \"to\": \"+1234567890\",\n  \"text\": \"Hi Jane! Thanks for reaching out on WhatsApp. How can we assist you today?\",\n  \"meta\": {\n    \"agentId\": \"agent_002\",\n    \"businessPhoneNumber\": \"+1234567890\",\n    \"templateUsed\": false\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/outbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "outbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Outbound - Email Response",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Email outbound sent successfully', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smtp\",\n  \"type\": \"email\",\n  \"from\": \"support-email\",\n  \"to\": \"customer@example.com\",\n  \"text\": \"Subject: Re: Support Request\\n\\nDear Bob,\\n\\nThank you for contacting our support team. We have received your request and are reviewing your account.\\n\\nWe will get back to you within 24 hours with a solution.\\n\\nBest regards,\\nSupport Team\",\n  \"meta\": {\n    \"agentId\": \"agent_003\",\n    \"subject\": \"Re: Support Request\",\n    \"replyToMessageId\": \"email_{{messageId}}\",\n    \"threadId\": \"thread_{{timestamp}}\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/outbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "outbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "🚨 Error Cases",
+            "item": [
+                {
+                    "name": "Invalid Business Slug",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Returns 400 for invalid business', function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});",
+                                    "",
+                                    "pm.test('Error message contains business_not_found', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.false;",
+                                    "    pm.expect(jsonData.error).to.include('business_not_found');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\",\n  \"type\": \"chat\",\n  \"identifier\": \"smarty-chat-main\",\n  \"from\": \"customer_test\",\n  \"text\": \"Test message for invalid business\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/invalid-business-slug/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "invalid-business-slug",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Missing Required Fields",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Returns 400 for missing fields', function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});",
+                                    "",
+                                    "pm.test('Response indicates error', function () {",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.false;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Invalid JSON Payload",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Returns error for invalid JSON', function () {",
+                                    "    pm.response.to.not.have.status(200);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{ invalid json payload without closing brace"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "🔄 Conversation Flow Tests",
+            "item": [
+                {
+                    "name": "1. Customer Initial Contact",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Initial contact successful', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "    ",
+                                    "    // Store conversation IDs",
+                                    "    pm.globals.set('conversationCustomerId', 'flow_customer_' + Date.now());",
+                                    "    pm.globals.set('conversationInboxId', jsonData.inboxId);",
+                                    "    pm.globals.set('conversationChannelId', jsonData.channelId);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        },
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "exec": [
+                                    "pm.globals.set('conversationCustomerId', 'flow_customer_' + Date.now());"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\",\n  \"type\": \"chat\",\n  \"identifier\": \"smarty-chat-main\",\n  \"from\": \"{{conversationCustomerId}}\",\n  \"text\": \"Hi, I need help with my recent order #12345. It hasn't arrived yet.\",\n  \"meta\": {\n    \"customerName\": \"Test Customer\",\n    \"orderNumber\": \"12345\",\n    \"sessionId\": \"{{sessionId}}\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "2. Agent Response",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Agent response sent', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\",\n  \"type\": \"chat\",\n  \"from\": \"smarty-chat-main\",\n  \"to\": \"{{conversationCustomerId}}\",\n  \"text\": \"Hello! I'm sorry to hear about the delay with order #12345. Let me check the status for you. Can you please provide your email address so I can look up your order?\",\n  \"meta\": {\n    \"agentId\": \"agent_001\",\n    \"agentName\": \"Sarah\",\n    \"orderNumber\": \"12345\",\n    \"responseType\": \"order_inquiry\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/outbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "outbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "3. Customer Provides Info",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Customer follow-up processed', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\",\n  \"type\": \"chat\",\n  \"identifier\": \"smarty-chat-main\",\n  \"from\": \"{{conversationCustomerId}}\",\n  \"text\": \"Sure, my email is testcustomer@example.com. I placed the order on January 5th.\",\n  \"meta\": {\n    \"customerEmail\": \"testcustomer@example.com\",\n    \"orderDate\": \"2024-01-05\",\n    \"sessionId\": \"{{sessionId}}\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/inbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "inbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "4. Final Agent Resolution",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Conversation resolved successfully', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "    const jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.ok).to.be.true;",
+                                    "    ",
+                                    "    console.log('Conversation flow completed successfully!');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"provider\": \"smarty\",\n  \"type\": \"chat\",\n  \"from\": \"smarty-chat-main\",\n  \"to\": \"{{conversationCustomerId}}\",\n  \"text\": \"Thank you! I found your order #12345. It was shipped yesterday and should arrive by tomorrow. Here's your tracking number: TRK123456789. Is there anything else I can help you with?\",\n  \"meta\": {\n    \"agentId\": \"agent_001\",\n    \"agentName\": \"Sarah\",\n    \"orderNumber\": \"12345\",\n    \"trackingNumber\": \"TRK123456789\",\n    \"resolution\": \"tracking_provided\",\n    \"status\": \"resolved\"\n  }\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/b/{{businessSlug}}/channels/messages/outbound",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "b",
+                                "{{businessSlug}}",
+                                "channels",
+                                "messages",
+                                "outbound"
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,regular,600,700,800,900%7CInter:100,200,300,regular,500,600,700,800,900"
+        media="all">
+    <style type="text/css">
+        body {
+            color: #333;
+            font-family: Inter, sans-serif;
+            font-size: 14px;
+            line-height: 20px;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+
+        .invoice_pagewrap {
+            user-select: none;
+            width: 100vw;
+            height: fit-content;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+        }
+
+        .receipt_focus {
+            border: 2px solid #a7a9ac;
+            border-radius: 5px;
+            flex-direction: column;
+            flex: 1;
+            align-self: stretch;
+            align-items: flex-start;
+            margin-right: 0;
+            padding: 10px 20px 0;
+            display: flex;
+        }
+
+        .receipt_main {
+            margin-top: 50px;
+            width: 60%;
+            background-color: #fff;
+            flex-direction: column;
+            padding: 20px;
+            display: flex;
+            overflow: hidden;
+            height: fit-content;
+            box-shadow: 0 2px 11px rgba(0, 0, 0, .2);
+        }
+
+        .receipt_toprow {
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            display: flex;
+        }
+
+        .receipt_toprow-company {
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            display: flex;
+        }
+
+        .invoice_toprow-leftop {
+            width: 100%;
+            height: 70px;
+        }
+
+        .invoice_logo {
+            width: 70%;
+        }
+
+        img {
+            max-width: 100%;
+            vertical-align: middle;
+            display: inline-block;
+            -webkit-user-drag: none;
+        }
+
+        .invoice_paragraph {
+            margin-bottom: 0;
+        }
+
+        .invoice_focus-row {
+            margin-bottom: 10px;
+        }
+
+        .invoice_paragraph.text-bold {
+            font-weight: 800;
+        }
+
+        .invoice_pricetext {
+            font-size: 25px;
+            font-weight: 600;
+            line-height: 1.5em;
+        }
+
+        .receipt-btn-div {
+            display: flex;
+        }
+
+        .receipt-btn-div-block {
+            color: rgba(51, 51, 51, .8);
+            margin-right: 20px;
+            font-size: 12px;
+            display: flex;
+        }
+
+        .invoice_body {
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            display: flex;
+        }
+
+        .invoice_notes {
+            flex-direction: column;
+            align-items: center;
+            padding-left: 10px;
+            padding-right: 10px;
+            display: flex;
+        }
+
+        .receipt_paragraph-small-footer {
+            margin-bottom: 0;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .invoice-spanlink {
+            color: #d87d79;
+            text-decoration: none;
+        }
+
+        .receipt_details {
+            flex-flow: column wrap;
+            flex: 1;
+            justify-content: space-between;
+            align-items: stretch;
+            display: flex;
+        }
+
+        .receipt_details-item {
+            width: auto;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            display: flex;
+        }
+
+        .invoice_paragraph-small.text-bold {
+            font-weight: 800;
+        }
+
+        .invoice_paragraph-small {
+            margin-bottom: 0;
+            font-size: 12px;
+        }
+
+        .receipt-payment-method-info {
+            align-items: center;
+            display: flex;
+        }
+
+        .receipt-payment-method-icon {
+            width: 30px;
+            align-items: flex-start;
+            margin-right: 3px;
+            display: flex;
+        }
+
+        .receipt_table {
+            flex-direction: column;
+            margin-bottom: 20px;
+            display: flex;
+        }
+
+        .invoice_tableheader {
+            background-color: #edf0f4;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+        }
+
+        .receipt_tablebody {
+            flex-direction: column;
+            display: flex;
+        }
+
+        .invoice_tablecol {
+            flex: 1;
+        }
+
+        .invoice_tablecol._w-15.flex_horizontal {
+            justify-content: flex-end;
+            align-items: center;
+            display: flex;
+        }
+
+        .invoice_tablecol._w-15 {
+            width: 15%;
+            flex: none;
+        }
+
+        .reciept_tablerow.no-line {
+            border-bottom-style: none;
+        }
+
+        .reciept_tablerow {
+            border-bottom: 1px solid rgba(0, 0, 0, .1);
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding: 5px 10px;
+            display: flex;
+        }
+
+        .reciept_paragraph-small-date {
+            color: rgba(51, 51, 51, .7);
+            letter-spacing: -.5px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.1em;
+        }
+
+        .receipt_paragraph-small-item {
+            margin-bottom: 0;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.2em;
+        }
+
+        .invoice_paragraph-small-qty {
+            color: rgba(51, 51, 51, .6);
+            margin-bottom: 0;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.2em;
+        }
+    </style>
+</head>
+
+<body>
+    <p>Dear {{ customer.name }},</p>
+    <p>Thank you for your subscription.</p>
+    <p>Your receipt:</p>
+    <div class="invoice_pagewrap">
+        <div class="receipt_main">
+            <div class="receipt_toprow">
+                <div class="receipt_toprow-company">
+                    <div class="invoice_toprow-leftop">
+                        <div class="invoice_logo">
+                            <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzODAgMTQ0LjgzIj4KICA8ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xIHsKICAgICAgICBmaWxsOiAjYTdhOWFjOwogICAgICB9CgogICAgICAuY2xzLTIgewogICAgICAgIGZpbGw6ICM5Mzk1OTg7CiAgICAgIH0KCiAgICAgIC5jbHMtMyB7CiAgICAgICAgZmlsbDogI2Y0OTc4ZTsKICAgICAgfQoKICAgICAgLmNscy00IHsKICAgICAgICBmaWxsOiAjMzliNTRhOwogICAgICB9CgogICAgICAuY2xzLTUgewogICAgICAgIGZpbGw6IG5vbmU7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+CiAgICA8Zz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzIuNjEsMTEzLjQzbC0xMC4yOSwyMS4xOWgtMy4ybDEwLjI5LTIxLjE5aDMuMloiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMzguNzEsMTM0LjQ4aC0zLjU5di0yMC45MWgzLjZ2MjAuOTFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTU0LjEyLDEzNC40OGgtMTEuNzh2LTNsNy4yNy04LjM4aC03LjEzdi0zaDExLjQ0djIuODlsLTcuMzcsOC40Nmg3LjU3djMuMDNaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTY4Ljg0LDExMy40M2wtMTAuMjksMjEuMTloLTMuMTZsMTAuMjktMjEuMTloMy4xNloiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNNzcuNjUsMTM5LjFoLTYuM3YtMjguMThoNi4zdjIuNjVoLTMuNDJ2MjIuODVoMy40MnYyLjY4WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik04My40LDE0MC4wOGgtMy4zOXYtMjBoMy4zdjEuOTRjLjQ0LS42OSwxLjA3LTEuMjMsMS44MS0xLjU4LC44Ny0uNDUsMS44My0uNjcsMi44LS42NSwxLjg2LS4wOSwzLjY2LC42OSw0Ljg3LDIuMTEsMS4yMiwxLjUyLDEuODUsMy40MywxLjc3LDUuMzgsLjA3LDEuOTctLjU5LDMuOS0xLjg2LDUuNDEtMS4yMywxLjQ0LTMuMDQsMi4yMy00LjkzLDIuMTUtLjkxLC4wMS0xLjgxLS4xOC0yLjYzLS41Ni0uNy0uMzItMS4zLS44Mi0xLjc0LTEuNDR2Ny4yNFptNy43LTEyLjhjLjA1LTEuMTctLjMzLTIuMzItMS4wNy0zLjIzLTEuNDItMS41NC0zLjgzLTEuNjMtNS4zNy0uMjEtLjA3LC4wNy0uMTQsLjE0LS4yMSwuMjEtLjc1LC45LTEuMTMsMi4wNi0xLjA4LDMuMjMtLjA2LDEuMTksLjMzLDIuMzUsMS4wOCwzLjI3LDEuMzksMS41NCwzLjc2LDEuNjYsNS4zLC4yNywuMS0uMDksLjE5LS4xOCwuMjctLjI3LC43Ni0uOTIsMS4xNS0yLjA4LDEuMS0zLjI3aC0uMDJaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTEwNy42MywxMjkuNDZsMi45LC45MmMtLjQxLDEuMy0xLjIyLDIuNDQtMi4zMiwzLjI2LTEuMjEsLjg4LTIuNjgsMS4zMy00LjE3LDEuMjgtMS45NSwuMDQtMy44My0uNzItNS4yLTIuMS0yLjgyLTMuMTItMi44NC03Ljg1LS4wNi0xMSwyLjc1LTIuOCw3LjI1LTIuODUsMTAuMDYtLjExLDEuMywxLjUsMS45NywzLjQ1LDEuODYsNS40NCwuMDMsLjM3LDAsLjczLS4wOSwxLjA5aC0xMC40OWMuMDEsMS4wMiwuNDQsMS45OSwxLjE5LDIuNjksLjczLC43LDEuNzIsMS4wOCwyLjczLDEuMDYsMS42NSwuMTMsMy4xNi0uOTMsMy41OS0yLjUzWm0tNy40Mi0zLjc0aDdjLS4wMy0uODYtLjM5LTEuNjctMS0yLjI3LS42OS0uNjUtMS42Mi0uOTgtMi41Ny0uOTItLjkzLS4wMy0xLjgzLC4zNC0yLjQ4LDEtLjU3LC41OS0uOTEsMS4zNy0uOTUsMi4xOVoiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTIzLjc5LDEyOS40NmwyLjg5LC45MmMtLjQsMS4zLTEuMjEsMi40NS0yLjMxLDMuMjYtMS4yMSwuODgtMi42OCwxLjMzLTQuMTcsMS4yOC0xLjk1LC4wNC0zLjgzLS43Mi01LjIxLTIuMS0yLjgyLTMuMTItMi44NC03Ljg1LS4wNi0xMSwyLjc1LTIuOCw3LjI1LTIuODUsMTAuMDctLjExLDEuMywxLjUxLDEuOTYsMy40NSwxLjg2LDUuNDQsLjAzLC4zNywwLC43My0uMDksMS4wOWgtMTAuNWMuMDEsMS4wMiwuNDUsMiwxLjIsMi42OSwuNzMsLjcsMS43MiwxLjA4LDIuNzMsMS4wNiwxLjY1LC4xMywzLjE2LS45MywzLjU5LTIuNTNabS03LjQzLTMuNzRoNy4wNWMtLjAzLS44Ni0uMzktMS42Ny0xLTIuMjctLjctLjY1LTEuNjMtLjk4LTIuNTgtLjkyLS45My0uMDItMS44MiwuMzQtMi40NywxLS41OSwuNTgtLjk0LDEuMzYtMSwyLjE5WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xMzcuNTYsMTI3LjM3aC04LjMydi0zaDguMzJ2M1oiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTQ3LjM1LDEyMi44NGMtMS4wNi0uMDItMi4wOCwuNDEtMi44LDEuMTktMS41NSwxLjkxLTEuNTUsNC42NSwwLDYuNTYsLjczLC43OSwxLjc2LDEuMjMsMi44NCwxLjIxLC44OCwuMDUsMS43NC0uMjQsMi40MS0uODEsLjU3LS40OSwuOTgtMS4xMywxLjItMS44NGwzLDEuMDljLS40MSwxLjMxLTEuMjEsMi40Ni0yLjI5LDMuMy0xLjIzLC45Ni0yLjc2LDEuNDYtNC4zMiwxLjM5LTEuOTgsLjAzLTMuODktLjc2LTUuMjctMi4xOS0yLjgzLTMuMDgtMi44My03LjgyLDAtMTAuOSwxLjM2LTEuNDMsMy4yNy0yLjIxLDUuMjQtMi4xNiwxLjU4LS4wNiwzLjEzLC40Myw0LjM4LDEuMzksMS4wNywuODQsMS44NCwyLjAxLDIuMTksMy4zM2wtMy4wNiwxLjEyYy0uMTktLjczLS41OS0xLjM5LTEuMTQtMS45LS42Ni0uNTYtMS41Mi0uODQtMi4zOC0uNzhaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTE2MS40NywxMjYuMDR2OC40NGgtMy40MnYtMjEuMzVoMy40MnY4LjM3YzIuMDctMi4yNiw1LjU4LTIuNDIsNy44NC0uMzUsLjA1LC4wNSwuMTEsLjEsLjE2LC4xNSwuOTMsMS4xNSwxLjQxLDIuNjEsMS4zNSw0LjA5djkuMDloLTMuNDJ2LTguNWMuMDQtLjgzLS4yMS0xLjY0LS43LTIuMzEtLjU4LS42Mi0xLjQxLS45NC0yLjI1LS44Ny0uODEtLjAzLTEuNTksLjMtMi4xMywuOTEtLjU1LC42NS0uODUsMS40OC0uODUsMi4zM1oiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTgzLjc5LDEyOS40NmwyLjg5LC45MmMtLjQxLDEuMy0xLjIyLDIuNDQtMi4zMiwzLjI2LTEuMjEsLjg4LTIuNjgsMS4zMy00LjE3LDEuMjgtMS45NSwuMDQtMy44My0uNzItNS4yMS0yLjEtMS40Ni0xLjQ5LTIuMjMtMy41Mi0yLjEzLTUuNi0uMDctMi4wMSwuNjgtMy45NywyLjA4LTUuNDIsMi43NS0yLjgsNy4yNS0yLjg1LDEwLjA3LS4xMSwxLjI5LDEuNTEsMS45NSwzLjQ2LDEuODUsNS40NCwuMDMsLjM3LDAsLjczLS4wOSwxLjA5aC0xMC40OWMuMDEsMS4wMiwuNDQsMS45OSwxLjE5LDIuNjksLjczLC43LDEuNzIsMS4wOCwyLjczLDEuMDYsMS42NSwuMTQsMy4xNi0uOTEsMy42LTIuNTFabS03LjQzLTMuNzRoN2MtLjAxLS44NS0uMzUtMS42Ni0uOTUtMi4yNy0uNy0uNjUtMS42My0uOTgtMi41OC0uOTItLjkzLS4wMy0xLjgzLC4zNC0yLjQ4LDEtLjU4LC41OS0uOTMsMS4zNi0uOTksMi4xOVoiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMTk5Ljk0LDEyOS40NmwyLjg5LC45MmMtLjQsMS4zLTEuMjEsMi40NS0yLjMxLDMuMjYtMS4yMSwuODgtMi42OCwxLjMzLTQuMTgsMS4yOC0xLjk1LC4wNS0zLjg0LS43LTUuMjItMi4wOC0yLjgtMy4xMi0yLjgzLTcuODUtLjA2LTExLDIuNzUtMi44LDcuMjUtMi44NSwxMC4wNy0uMTEsMS4zLDEuNTEsMS45NiwzLjQ1LDEuODYsNS40NCwuMDMsLjM3LDAsLjczLS4wOSwxLjA5aC0xMC40N2MwLDEuMDIsLjQzLDIsMS4xOSwyLjY5LC43MywuNywxLjcxLDEuMDgsMi43MiwxLjA2LDEuNjYsLjE0LDMuMTgtLjk0LDMuNi0yLjU1Wm0tNy40My0zLjc0aDcuMDVjLS4wMy0uODYtLjM5LTEuNjctMS0yLjI3LS43LS42NS0xLjYzLS45OC0yLjU4LS45Mi0uOTMtLjAyLTEuODMsLjM0LTIuNDgsMS0uNTgsLjU5LS45MywxLjM3LS45OSwyLjE5aDBaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTIxMS4xMiwxMzkuMWgtNi4zdi0yLjY4aDMuNDJ2LTIyLjg1aC0zLjQydi0yLjY1aDYuM3YyOC4xOFoiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0yIiBkPSJNMTkuNDksNjIuMzFjLS4xNy0yLjQzLDEuODgtNC41Miw0LjYtNC42OCwuMjEtLjAxLC40Mi0uMDEsLjY0LDAsMi43MS0uMTYsNS4wNSwxLjY5LDUuMjIsNC4xMiwuMDEsLjE5LC4wMSwuMzcsMCwuNTZ2MzMuMjNjLjE4LDIuNDMtMS44OCw0LjUzLTQuNTksNC42OS0uMjEsLjAxLS40MiwuMDEtLjY0LDAtMi43MSwuMTYtNS4wNS0xLjY4LTUuMjMtNC4xMS0uMDEtLjE5LS4wMS0uMzksMC0uNThWNjIuMzFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMiIgZD0iTTY4LjE2LDEwMC40OWMtMTUuNDEsMC0yOC40My02Ljg2LTI4LjQzLTE0Ljk3LDAtMS43NywuNTMtNS44OSw1LjQxLTUuODksMi40NiwwLDMuOTcsMS40Niw2LjQ0LDQuMDUsMy4yNCwzLjM5LDcuMjcsNy42MSwxNS44Myw3LjYxLDcuNDgsMCwxMi43LTMuNjQsMTIuNy04Ljg2LDAtNi4xLTQuODktNy4zNS0xMS4wOC04LjkzbC0xMS44My0yLjk5Yy0xMC40OS0yLjY3LTE3LjQ4LTYuNzUtMTcuNDgtMTguMDUsMC0xNC4wNSwxMy43Ni0xOS4wMywyNS41NS0xOS4wMywxNC4xMiwwLDI2LjA1LDUuNjYsMjYuMDUsMTIuMzZ2LjEyYy4xOSwzLjIzLTIuMTksNi4wMS01LjI5LDYuMi0uMTIsMC0uMjMsLjAxLS4zNCwuMDEtMi40MiwwLTMuNzktMS4yNy01LjY5LTMuMDMtMi43MS0yLjUxLTYuMDktNS42NC0xMy4zNS01LjY0LTEwLjk0LDAtMTIuNTcsNC45MS0xMi41Nyw3LjgzLDAsNi4xNCw1LjgsNy40LDExLjQsOC42Mmw3LjY0LDEuODFjMTAuNTUsMi41MiwyMS4zNSw2LjY2LDIxLjM1LDE4LjI3LDAsMTQuMTEtMTMuNjQsMjAuNTMtMjYuMzEsMjAuNTNaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTE2Ni43Nyw4MS4wMmMwLDYsMy44OSwxMC4zNCwxMC41LDEwLjM0LDguNTQsMCw4LjU0LTUuNiwxMy4xMy01LjYsMi40OCwwLDQuNTMsMS45NSw0LjY2LDQuNDMsMCw2Ljg0LTExLDEwLTE3Ljc5LDEwLTE1Ljg2LDAtMjEuODQtMTAuNzMtMjEuODQtMjAuNiwwLTEzLjIxLDgtMjIuMDcsMjEuNDUtMjIuMDdzMjAuNTEsOS4yNSwyMC41MSwxOC41N2MwLDMuODktMS4xNiw0LjktNSw0LjlsLTI1LjYyLC4wM1ptMTkuOS02LjUzYy0uNjItNS4yMS00LjUxLTktOS41Ni05LTUuNjcsMC05LjA5LDMuNS0xMC4zNCw5aDE5LjlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTIxMy44NSw4MS4wMmMwLDYsMy44OSwxMC4zNCwxMC41LDEwLjM0LDguNTQsMCw4LjU0LTUuNiwxMy4xMy01LjYsMi40OCwwLDQuNTMsMS45NSw0LjY2LDQuNDMsMCw2Ljg0LTExLDEwLTE3Ljc5LDEwLTE1Ljg2LDAtMjEuODQtMTAuNzMtMjEuODQtMjAuNiwwLTEzLjIxLDgtMjIuMDcsMjEuNDUtMjIuMDdzMjAuNTEsOS4yNSwyMC41MSwxOC41N2MwLDMuODktMS4xNiw0LjktNSw0LjlsLTI1LjYyLC4wM1ptMTkuOS02LjUzYy0uNjItNS4yMS00LjUxLTktOS41Ni05LTUuNjcsMC05LjA5LDMuNS0xMC4zNCw5aDE5LjlaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTI3MS4zNSw1Ny41NWM5LjQ4LDAsMTYuNTUsNS4zNiwxNi41NSwxMC42NCwwLDMuMjctMi40MSw0LjktNS4yOCw0LjktNS4zNywwLTMuNDItNi42OC0xMS41OC02LjY4LTQuNDMsMC05LjY0LDMtOS42NCwxMy4yOSwwLDcuMDcsMy4zNCwxMS42Niw5LjU2LDExLjY2LDcuOTMsMCw2LjIyLTcuMzEsMTIuMi03LjMxLDIuNDctLjE3LDQuNjEsMS43LDQuNzgsNC4xOCwwLC4wNiwwLC4xMSwwLC4xNywwLDUtNS41OSwxMS44Mi0xNy4yNSwxMS44Mi0xNCwwLTIwLjYtOC42My0yMC42LTIwLjUyLS4wNS0xMy4wNiw3LjM0LTIyLjE1LDIxLjI1LTIyLjE1WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0yOTMuOTUsNDcuOTFjMC0zLjczLDIuMjYtNS42Nyw1LjY4LTUuNjdzNS42NywxLjk0LDUuNjcsNS42N3YxNS42MmguMTVjMy0zLjkzLDcuNzItNi4xNywxMi42Ny02LDYuODQsMCwxNC4zLDMuNDIsMTQuMywxNC45MnYyMi4wOWMwLDMtMS4yNCw1LjY4LTUuNjcsNS42OHMtNS42Ny0yLjY1LTUuNjctNS42OHYtMTkuODJjMC00LjU4LTIuMjYtNy44NS03LjE1LTcuODUtNC44NSwuMTEtOC42OSw0LjEyLTguNiw4Ljk3djE4LjdjMCwzLTEuMjUsNS42OC01LjY3LDUuNjhzLTUuNzEtMi42NS01LjcxLTUuNjhWNDcuOTFaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTM1Ni41Nyw4OC4zMmguMTVsNi45Mi0yNS43MmMuNzgtMi44OCwyLjMzLTUsNS40NC01LDMuMDEtLjE5LDUuNjMsMi4wNyw1Ljg3LDUuMDgtLjA4LDEuMjMtLjM3LDIuNDQtLjg2LDMuNTdsLTEzLjE0LDM3LjIzYy0yLjcyLDcuNzctNS44MywxMS44MS0xMywxMS44MS01LjA1LDAtNy4xNS0yLjQ4LTcuMTUtNS4yLDAtMywyLjE4LTQuNTksNS4yMS00LjU5aDEuMTZjMS40OCwwLDMuMTEtLjA4LDQtMy41N2wtMTEuODYtMzMuNjZjLS45My0yLjcyLTEuNC00LTEuNC01LjI4LDAtMywyLjQyLTUuNDMsNS40Mi01LjQ0LC4wMywwLC4wNywwLC4xLDAsMi43Mi0uMTUsNS4xNiwxLjY1LDUuODMsNC4yOWw3LjMxLDI2LjQ4WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTMiIGQ9Ik0xMjUuOTUsODEuNDRjLTEzLjM4LDAtMjQuMjMtMTAuODYtMjQuMjItMjQuMjQsMC0xMy4zOCwxMC44Ni0yNC4yMywyNC4yNC0yNC4yMiwxMy4zOCwwLDI0LjIyLDEwLjg1LDI0LjIyLDI0LjIzLS4wMiwxMy4zOC0xMC44NiwyNC4yMi0yNC4yNCwyNC4yM1ptMC0zNy4yOWMtNy4yMSwwLTEzLjA2LDUuODUtMTMuMDYsMTMuMDZzNS44NSwxMy4wNiwxMy4wNiwxMy4wNiwxMy4wNi01Ljg1LDEzLjA2LTEzLjA2aDBjMC03LjIxLTUuODUtMTMuMDUtMTMuMDYtMTMuMDZaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTEwNy4zLDk5LjEzYy0zLjA4LDAtNS41OC0yLjQ5LTUuNTktNS41NywwLDAsMCwwLDAtLjAxVjU4YzAtMy4wOSwyLjUtNS41OSw1LjU5LTUuNTksMy4wOSwwLDUuNTksMi41LDUuNTksNS41OXYzNS41NWMwLDMuMDgtMi41LDUuNTgtNS41OCw1LjU4LDAsMCwwLDAtLjAxLDBaIi8+CiAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTE2MS43Niw0OC4zNWMtMS40NCwwLTIuNjgtMS4wMi0yLjk1LTIuNDQtMi42LTEzLjIxLTE0LjE3LTIyLjczLTI3LjYzLTIyLjc0LTEuNjYsMC0zLTEuMzQtMy0zczEuMzQtMywzLTNjMTYuMzQsLjAyLDMwLjM5LDExLjU5LDMzLjU0LDI3LjYyLC4zMiwxLjYzLS43NCwzLjItMi4zNiwzLjUyLDAsMC0uMDIsMC0uMDMsMC0uMTksLjAzLS4zOCwuMDQtLjU3LC4wM1oiLz4KICAgICAgPHBhdGggY2xhc3M9ImNscy0zIiBkPSJNMTc0LjUsNDcuNDJjLTEuNDksLjAyLTIuNzctMS4wNi0zLTIuNTQtMy4wNy0xOS44OC0yMC4yMy0zNC41My00MC4zNS0zNC40My0xLjY2LDAtMy0xLjM0LTMtM3MxLjM0LTMsMy0zYzIzLjA4LS4xLDQyLjc3LDE2LjcsNDYuMywzOS41MSwuMjUsMS42My0uODcsMy4xNi0yLjUsMy40Mi0uMTUsLjAzLS4zLC4wNC0uNDUsLjA0WiIvPgogICAgICA8cGF0aCBjbGFzcz0iY2xzLTQiIGQ9Ik0xMTkuNTYsMjkuODljLTEuNzUtMy4xNi0zLjg3LTYuMS02LjMxLTguNzYsLjg2LDAsMy4yMiwxLjQ2LDQuNjYsMi43NywxLjM0LDEuMjcsMi40MywyLjc5LDMuMTksNC40OCwuNjMtLjgxLDEuMDktMS43NCwxLjM1LTIuNzQsLjgtMi45Ni0uMjktNi4xMS0yLjc1LTcuOTQtMi44Mi0yLjEtNi4yMy0zLjI2LTkuNzUtMy4zLTEuOTUtLjA3LTMuOSwuMTYtNS43OSwuNjdsLS4yMSwuMDdjLjA3LC4xNCwuMTMsLjI1LC4yLC4zNywxLjUzLDIuNCwyLjUzLDUuMSwyLjkxLDcuOTIsLjEsLjc0LC4yNSwxLjQ3LC40MiwyLjIsLjkxLDMuMTIsMy42LDUuNCw2LjgzLDUuNzgsMS43NywuMTMsMy41My0uMzQsNS0xLjM0bC4yNS0uMThaIi8+CiAgICAgIDxjaXJjbGUgY2xhc3M9ImNscy0yIiBjeD0iMjQuNjgiIGN5PSI0NC42NyIgcj0iNS4yIi8+CiAgICAgIDxyZWN0IGNsYXNzPSJjbHMtNSIgd2lkdGg9IjM4MCIgaGVpZ2h0PSIxNDQuODMiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg=="
+                                loading="lazy" alt="">
+                        </div>
+                    </div>
+                    <p class="invoice_paragraph">{{ company.name }}</p>
+                    <p class="invoice_paragraph">{{ company.address }}</p>
+                    <p class="invoice_paragraph">VAT Registration No. {{ company.vat }}</p>
+                </div>
+                <div class="receipt_focus">
+                    <div class="invoice_focus-row">
+                        <p class="invoice_paragraph text-bold mobile-text-center">
+                            Receipt issued to {{ customer.name }} ({{ customer.email }})</p>
+                        <div class="invoice_pricetext">{{ total }}</div>
+                    </div>
+                    <div class="invoice_focus-row">
+                        <p class="invoice_paragraph text-bold mobile-text-center">Paid</p>
+                        <p class="invoice_paragraph">{{ datePaid }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="invoice_body">
+                <div class="receipt_details">
+                    <div class="receipt_details-item">
+                        <p class="invoice_paragraph-small text-bold">Receipt Number</p>
+                        <p class="invoice_paragraph-small">{{ receiptId }}</p>
+                    </div>
+                    <div class="receipt_details-item">
+                        <p class="invoice_paragraph-small text-bold">Invoice Number</p>
+                        <p class="invoice_paragraph-small">{{ invoiceId }}</p>
+                    </div>
+                    <div class="receipt_details-item">
+                        <p class="invoice_paragraph-small text-bold">Payment method</p>
+                        <div class="receipt-payment-method-info">
+                            <div class="receipt-payment-method-icon">
+                                <img src="{{ cardData }}" loading="lazy" alt="" />
+                            </div>
+                            <p class="invoice_paragraph-small">- {{ last4 }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="invoice_tablecontainer">
+                <div class="receipt_table">
+                    <div class="invoice_tableheader">
+                        <div class="invoice_tablecol">
+                            <div>Receipt #{{ receiptId }}</div>
+                        </div>
+                        <div class="invoice_tablecol _w-15 flex_horizontal">
+                            <div>Amount</div>
+                        </div>
+                    </div>
+                    <div class="receipt_tablebody">
+                        {{#each products}}
+                        <div class="reciept_tablerow no-line">
+                            <div class="invoice_tablecol">
+                                <p class="reciept_paragraph-small-date">{{ start }} - {{ end }}</p>
+                                <p class="receipt_paragraph-small-item">{{ name }}</p>
+                                <p class="invoice_paragraph-small-qty">Qty {{ quantity }}</p>
+                            </div>
+                            <div class="invoice_tablecol _w-15 flex_horizontal">
+                                <p class="receipt_paragraph-small">{{ amount }}</p>
+                            </div>
+                        </div>
+                        {{/each}}
+                        <div class="reciept_tablerow">
+                            <div class="invoice_tablecol">
+                                <p class="receipt_paragraph-small-item">Subtotal</p>
+                            </div>
+                            <div class="invoice_tablecol _w-15 flex_horizontal">
+                                <p class="receipt_paragraph-small">{{ subTotal }}</p>
+                            </div>
+                        </div>
+                        <div class="reciept_tablerow no-line">
+                            <div class="invoice_tablecol">
+                                <p class="receipt_paragraph-small-item">Total excluding tax</p>
+                            </div>
+                            <div class="invoice_tablecol _w-15 flex_horizontal">
+                                <p class="receipt_paragraph-small">{{ subTotal }}</p>
+                            </div>
+                        </div>
+                        <div class="reciept_tablerow">
+                            <div class="invoice_tablecol">
+                                <p class="invoice_paragraph-small-qty">Sales tax - US ({{ tax }})</p>
+                            </div>
+                            <div class="invoice_tablecol _w-15 flex_horizontal">
+                                <p class="receipt_paragraph-small gray">{{ salesTax }}</p>
+                            </div>
+                        </div>
+                        <div class="reciept_tablerow">
+                            <div class="invoice_tablecol">
+                                <p class="receipt_paragraph-small-item">Total</p>
+                            </div>
+                            <div class="invoice_tablecol _w-15 flex_horizontal">
+                                <p class="receipt_paragraph-small">{{ total }}</p>
+                            </div>
+                        </div>
+                        <div class="reciept_tablerow">
+                            <div class="invoice_tablecol">
+                                <p class="receipt_paragraph-small-item">Amount paid</p>
+                            </div>
+                            <div class="invoice_tablecol _w-15 flex_horizontal">
+                                <p class="receipt_paragraph-small">{{ total }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="invoice_notes">
+                <p class="receipt_paragraph-small-footer">By subscribing, you authorize us to charge you the
+                    subscription cost (as described above) automatically, charged to the
+                    payment method provided until canceled. Keep this for your records.
+                    Questions? Contact us at <a href="mailto:support@ispeechy.io"
+                        class="invoice-spanlink">support@ispeechy.io</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

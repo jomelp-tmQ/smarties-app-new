@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+import "tmq/inbox.proto"; // Use shared Pagination
+
+message createKnowledgeBaseRequest {
+    string userId = 1;
+    string collectionName = 2;
+    string collectionId = 3;
+    string createAt = 4;
+    string updateAt = 5;
+    string isDeleted = 6;
+    repeated string files = 7;
+    string businessId = 8;
+}
+
+message KnowledgeBaseResponse {
+    string success = 1;
+    bool message = 2;
+}
+
+message KnowledgeBaseUploadRequest {
+    string userId = 1;
+    string collectionId = 2;
+    repeated string fileIdList = 3; 
+    repeated string urlList = 4;    
+    string businessId = 5;
+    string type = 6;
+}
+
+message KnowledgeBaseUploadResponse {
+    string success = 1;
+    bool message = 2;
+}
+
+message FetchKnowledgeBaseRequest {
+    string userId = 1;
+    string searchQuery = 2;
+    int64 lastBasis = 3;
+    // New: match Inbox pagination style
+    Pagination page = 4;
+    // Optional legacy/top-level limit for backward compatibility/logging
+    int32 limit = 5;
+}
+
+message File {
+  string id = 1;
+  string name = 2;
+  string url = 3;
+}
+
+message Url {
+  string id = 1;
+  string url = 2;
+}
+
+
+message AllKnowledgeBase {
+    string collectionId = 1;
+    string userId = 2;
+    string collectionName = 3;
+    string id = 4;
+    uint64 createdAt = 5;
+    uint64 updatedAt = 6;
+    repeated File files = 7;
+    repeated Url urls = 8;
+}
+
+message FetchKnowledgeBaseResponse {
+    repeated AllKnowledgeBase knowledgeBases = 1;
+    int64 lastBasis = 2;
+}
+
+message FetchKbUrlRequest {
+    string collectionId = 1;
+}
+
+message FetchKbUrlResponse {
+    string url = 1;
+    bool success = 2;
+}
+
+service KnowledgeBaseService {
+  rpc createKnowledgeBase (createKnowledgeBaseRequest) returns (KnowledgeBaseResponse) {}
+  rpc uploadKnowledgeBase (KnowledgeBaseUploadRequest) returns (KnowledgeBaseUploadResponse) {}
+  rpc fetchKnowledgeBase (FetchKnowledgeBaseRequest) returns (FetchKnowledgeBaseResponse) {}
+  rpc generateUrl (FetchKbUrlRequest) returns (FetchKbUrlResponse) {}
+}

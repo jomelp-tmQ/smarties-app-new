@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+import "tmq/inbox.proto"; // Use shared Pagination
+
+
+message FetchScrapeRequest {
+    string userId = 1;
+    string searchQuery = 2;
+    int64 lastBasis = 3;
+    // New: match Inbox pagination style
+    Pagination page = 4;
+    // Optional legacy/top-level limit for backward compatibility/logging
+    int32 limit = 5;
+}
+
+message Body {
+    Metadata metadata = 1;
+    string url = 2;
+}
+
+message Metadata {
+    string consumerName = 1;
+    IpAddress ipAddress = 2;
+}
+
+message IpAddress {
+    IpData data = 1;
+}
+
+message IpData {
+    string ip = 1;
+}
+
+message Response {
+    ResponseBody body = 1; // structured response body
+    int32 status = 2;
+}
+
+message ResponseBody {
+    string message = 1;
+    string assistantId = 2;
+}
+
+message AllScrapeRequest {
+    int64 createdAt = 1;
+    string status = 2;
+    int32 code = 3;        // renamed from duplicate "status"
+    string errorMsg = 4;
+    Body body = 5;         // include url + metadata
+    Response response = 6; // include body + status
+}
+
+
+message FetchScrapeResponse {
+    repeated AllScrapeRequest scrapeRequest = 1;
+    int64 lastBasis = 2;
+}
+
+service ScrapeRequestService {
+  rpc fetchScrapeRequests (FetchScrapeRequest) returns (FetchScrapeResponse) {}
+}

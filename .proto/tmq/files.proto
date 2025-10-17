@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package tmq;
+
+import "tmq/inbox.proto"; // Reuse Pagination message
+
+message FileItem {
+  string id = 1;                 // MongoDB _id as string
+  string file_id = 2;            // fileId
+  string business_id = 3;        // ObjectId as string
+  string user_id = 4;            // ObjectId as string
+  string original_name = 5;      // Original filename
+  double file_size = 6;          // in bytes
+  double created_at = 7;         // Timestamp
+  string mime_type = 8;          // MIME type (optional)
+  string status = 9;             // optional status mirror
+  string kb_status = 10;         // knowledge base processing status
+}
+
+message FetchFilesRequest {
+  string business_id = 1;  // required
+  Pagination page = 2;     // last_basis + limit
+}
+
+message FetchFilesResponse {
+  repeated FileItem files = 1;
+  int32 total_count = 2;
+  bool success = 3;
+  string error_message = 4;
+  double last_basis = 5;   // pagination cursor based on created_at
+}
+
+// Soft-delete a file by file_id (adds deletedAt on the record)
+message DeleteFileRequest {
+  string file_id = 1; // required
+}
+
+message DeleteFileResponse {
+  bool success = 1;
+  string error_message = 2;
+}
+
+service FilesService {
+  rpc FetchFiles(FetchFilesRequest) returns (FetchFilesResponse);
+  rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse);
+}
+
+

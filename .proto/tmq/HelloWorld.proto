@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+import "tmq/common.proto";
+
+package tmq;
+
+message HelloWordRequest {
+    string name = 1;
+}
+
+service HelloWorldService {
+    rpc SayHello (HelloWordRequest) returns (DefaultResponse) {}
+}

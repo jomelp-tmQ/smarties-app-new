@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+message AuthResponse {
+   string url = 1;
+   string apiKey = 2;
+}
+
+message AuthRequest {
+}
+
+message FetchInvoicesRequest {
+   string userId = 1;
+   int64 lastBasis = 2;
+}
+
+message Invoice {
+    string id = 1;
+    string invoiceId = 2;
+    string userId = 3;
+    int32 amountDue = 4;
+    int32 amountPaid = 5;
+    int64 createdAt = 6;
+    string currency = 7;
+    string status = 8;
+    string customerId = 9;
+    string invoiceUrl = 10;
+    string invoicePdf = 11;
+ }
+
+message fetchSubscriptionRequest {
+   string userId = 1;
+}
+
+
+message fetchSubscriptionResponse {
+   string id = 1;
+   string userId = 2;
+   int64 createdAt = 4;
+   int64 updatedAt = 5;
+   string status = 6;
+   string customerId = 7;
+   string subscriptionType = 8;
+   string termBillingCycle = 9;
+   string termCurrency = 10;
+   int32 termPrice = 11;
+   string referenceId = 12;
+   bool success = 13;
+   string message = 14;
+}
+
+message FetchInvoicesResponse {
+   repeated Invoice invoices = 1;
+   int64 lastBasis = 2;
+}
+
+message fetchpaymentMethodRequest {
+   string userId = 1;
+}
+
+message fetchpaymentMethodResponse {
+   string id = 1;
+   string userId = 2;
+   string type = 3;
+   string cardBrand = 4;
+   string cardLast4 = 5;
+   int32 cardExpMonth = 6;
+   int32 cardExpYear = 7;
+   bool success = 8;
+   string message = 9;
+}
+
+
+service CustomBillingService {
+    rpc fetchAuth (AuthRequest) returns (AuthResponse) {}
+    rpc fetchInvoices (FetchInvoicesRequest) returns (FetchInvoicesResponse) {}
+    rpc fetchSubscription (fetchSubscriptionRequest) returns (fetchSubscriptionResponse) {}
+    rpc fetchPaymentMethod (fetchpaymentMethodRequest) returns (fetchpaymentMethodResponse) {}
+}

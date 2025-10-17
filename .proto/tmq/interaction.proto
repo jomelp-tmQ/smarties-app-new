@@ -1,0 +1,71 @@
+syntax = "proto3";
+import "tmq/inbox.proto";
+import "google/protobuf/any.proto";
+package tmq;
+
+// Request message to get interactions by inbox ID
+message GetInteractionsRequest {
+  string inbox_id = 1;  // ObjectId as string
+}
+
+// Payload structure for interaction content
+message InteractionPayload {
+  string text = 1;                    // Text content (optional)
+  repeated string attachments = 2;    // List of attachment URLs/paths (optional)
+}
+
+// Attribute key-value pair with support for different value types
+message InteractionAttribute {
+  string key = 1;
+  google.protobuf.Any value = 2;
+}
+
+// Individual interaction entry
+message Interaction {
+  string id = 1;                // MongoDB _id as string
+  string business_id = 2;       // ObjectId as string
+  string inbox_id = 3;          // ObjectId as string
+  string channel_id = 4;        // ObjectId as string
+  string consumer_id = 5;       // ObjectId as string
+  string user_id = 6;           // ObjectId as string (optional)
+  string medium = 7;            // Communication medium (required)
+  string direction = 8;         // Direction of communication (required)
+  InteractionPayload payload = 9; // Interaction content (required)
+  string status = 10;           // Status of interaction (optional)
+  double timestamp = 11;        // Timestamp as double (optional)
+  repeated InteractionAttribute attributes = 12; // Custom attributes (optional)
+}
+
+// Response message containing list of interactions
+message GetInteractionsResponse {
+  repeated Interaction interactions = 1;
+  int32 total_count = 2;        // Total number of entries
+  bool success = 3;
+  string error_message = 4;     // Error message if success is false
+  // Returned cursor for the next request; corresponds to the last item's timestamp in this page.
+  double last_basis = 5;        // unset/0 when no further pages
+}
+
+// Request: interactions across multiple inboxes
+message GetInteractionsByInboxIdsRequest {
+  repeated string inbox_ids = 1;
+}
+
+// Request: interactions by consumer (scoped to business)
+message GetInteractionsByConsumerRequest {
+  string business_id = 1;
+  string consumer_id = 2;
+  // Optional pagination (reuses Pagination from inbox.proto)
+  Pagination page = 3;
+  repeated string channel_ids = 4;
+}
+
+// Service definition for interaction operations
+service InteractionService {
+  // Get interactions by inbox ID
+  rpc GetInteractions(GetInteractionsRequest) returns (GetInteractionsResponse);
+  // Get interactions by multiple inbox IDs
+  rpc GetInteractionsByInboxIds(GetInteractionsByInboxIdsRequest) returns (GetInteractionsResponse);
+  // Get interactions by consumer within a business
+  rpc GetInteractionsByConsumer(GetInteractionsByConsumerRequest) returns (GetInteractionsResponse);
+}

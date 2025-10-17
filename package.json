@@ -1,0 +1,60 @@
+{
+  "name": "smarties-app-new",
+  "private": true,
+  "scripts": {
+    "start": "meteor run",
+    "test": "meteor test --once --driver-package meteortesting:mocha",
+    "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
+    "visualize": "meteor --production --extra-packages bundle-visualizer"
+  },
+  "dependencies": {
+    "@assistant/assistant-client": "^1.0.1",
+    "@babel/runtime": "^7.20.7",
+    "@content-creation/client": "file:.core-packages/content-creation-client-1.0.0.tgz",
+    "@customer-engagement/client": "file:.core-packages/customer-engagement-client-1.0.0.tgz",
+    "@llm/llm-client": "^1.0.4",
+    "@sales-enablement/client": "file:.core-packages/sales-enablement-client-1.0.0.tgz",
+    "@smarties/attachments": "file:.core-packages/smarties-attachments-0.1.0.tgz",
+    "@tmq-dev-ph/logger-pino": "^1.0.0",
+    "@tmq-dev-ph/tmq-dev-core-client": "file:.core-packages/tmq-dev-ph-tmq-dev-core-client-1.3.148.tgz",
+    "@tmq-dev-ph/tmq-dev-core-server": "file:.core-packages/tmq-dev-ph-tmq-dev-core-server-1.2.735.tgz",
+    "@tmq-justin/tools-call-client": "^1.0.3",
+    "@tmq-justin/uploadmanager-client": "^1.1.2",
+    "@tmq-justin/vapi-call-client": "^1.0.2",
+    "@tmq-justin/vp-manager-client": "^1.0.0",
+    "@tmq-justin/widget-client": "^1.0.4",
+    "@tmq-shawn/kb-client": "^1.0.5",
+    "@tmq.paul/client-tts": "^1.0.7",
+    "@tmq.paul/pipecat-livekit-sdk": "^1.0.7",
+    "@tmq/logger": "^1.0.4",
+    "@unleash/proxy-client-react": "^5.0.1",
+    "axios": "^1.11.0",
+    "billing-client": "^2.0.4",
+    "connect-route": "^0.1.5",
+    "info-finder-client": "^1.0.1",
+    "lottie-react": "^2.4.1",
+    "lucide-react": "^0.536.0",
+    "meteor-node-stubs": "^1.2.5",
+    "moment": "^2.30.1",
+    "node-cron": "^4.2.1",
+    "pdf-parse": "^1.1.1",
+    "predefined-answer-client": "^1.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.62.0",
+    "react-loading-skeleton": "^3.5.0",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^6.30.0",
+    "redisvent-module": "^1.0.3",
+    "sonner": "^2.0.7",
+    "website-validator-client": "^1.0.0"
+  },
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.jsx",
+      "server": "server/main.js"
+    },
+    "testModule": "tests/main.js",
+    "modern": true
+  }
+}

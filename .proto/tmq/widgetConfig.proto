@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+// Request message definition
+message WidgetConfigRequest {
+  string name = 1;
+  repeated string domain = 2;
+  string assistantId = 3;
+  string assistantidllm = 4;
+  string userId = 5;
+}
+
+message FetchWidgetConfigRequest {
+  string userId = 1;
+  int64 lastBasis = 2;
+  string searchQuery = 3;
+}
+
+message UpdateWidgetConfigRequest {
+  string id = 1;
+  string name = 2;
+  repeated string domains = 3;
+  string siteId = 4;
+  string assistantIdCall = 5;
+  string assistantIdLlm = 6;
+  string userId = 7;
+  string widgetUrl = 8;
+}
+
+message AllWidgetConfig {
+  string id = 1;
+  string name = 2;
+  repeated string domains = 3;
+  string widgetUrl = 4;
+  string siteId = 5;
+  string secret = 6;
+  string assistantIdCall = 7;
+  string assistantIdLlm = 8;
+  string userId = 9;
+  uint64 createdAt = 10;
+  uint64 updatedAt = 11;
+}
+
+message FetchWidgetConfigResponse {
+  repeated AllWidgetConfig WidgetConfigs = 1;
+  int64 lastBasis = 2;
+}
+
+// Response message definition
+message WidgetConfigResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Service definition (optional, if you are using gRPC)
+service WidgetConfigService {
+  rpc createWidgetConfig(WidgetConfigRequest) returns (WidgetConfigResponse) {};
+  rpc fetchWidgetConfig (FetchWidgetConfigRequest) returns (FetchWidgetConfigResponse) {}
+  rpc updateWidgetConfig (UpdateWidgetConfigRequest) returns (WidgetConfigResponse) {}
+}

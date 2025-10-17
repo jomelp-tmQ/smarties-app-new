@@ -1,0 +1,20 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#      _____ __  __  ___    ____  _______     __      #
+#     |_   _|  \/  |/ _ \  |  _ \| ____\ \   / /      #
+#       | | | |\/| | | | | | | | |  _|  \ \ / /       #
+#       | | | |  | | |_| | | |_| | |___  \ V /        #
+#       |_| |_|  |_|\__\_\ |____/|_____|  \_/         #
+#                                                     #
+#            Templatess Configuration File            #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Configuration for templates
+templates:
+  billing:
+    receipt: "template-receipt.html"
+    invoice: "template-invoice.html"
+    failedPayment: "template-failed-payment.html"
+  account:
+    welcome: "template-welcome.html"
+    registration: "template-registration.html"
+    reset: "template-reset.html"

@@ -1,0 +1,125 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+package tmq;
+
+// Consumer information for inbox entries
+message Consumer {
+  string display_name = 1;
+  string primary_email = 2;
+  string primary_phone = 3;
+  string avatar_url = 4;
+  repeated string tags_preview = 5;
+  bool is_vip = 6;
+}
+
+// Channel information for inbox entries
+message Channel {
+  string id = 1;          // ObjectId as string
+  string identifier = 2;  // optional human/tenant identifier
+  string type = 3;        // e.g., chat, sms, whatsapp, call
+}
+
+// Request message to get inbox entries by business ID
+message GetInboxRequest {
+  string business_id = 1;  // ObjectId as string
+  // Optional pagination (reuses Pagination)
+  Pagination page = 2;
+  // Optional server-side filters
+  repeated InboxQuery query = 3;
+}
+
+// Individual inbox entry
+message Inbox {
+  string id = 1;             // MongoDB _id as string
+  string business_id = 2;    // ObjectId as string
+  string consumer_id = 3;    // ObjectId as string
+  Channel channel = 4;              // (optional)
+  string status = 5;
+  string assignee_id = 6;    // ObjectId as string (optional)
+  double locked_at = 7;      // Timestamp as double (optional)
+  int32 unread_for_assignee = 8;
+  string latest_interaction_id = 9;  // ObjectId as string (optional)
+  string latest_snippet = 10;        // (optional)
+  double latest_at = 11;             // Timestamp as double (optional)
+  string latest_direction = 12;      // (optional)
+  double created_at = 13;            // Timestamp as double
+  // Optional: lightweight consumer preview
+  Consumer consumer = 14;            // (optional)
+}
+
+// Response message containing list of inbox entries
+message GetInboxResponse {
+  repeated Inbox inboxes = 1;
+  int32 total_count = 2;      // Total number of entries
+  bool success = 3;
+  string error_message = 4;   // Error message if success is false
+  // Returned cursor for the next request; corresponds to the last item's latest_at in this page.
+  double last_basis = 5;      // unset/0 when no further pages
+}
+
+// Merged inbox view grouped by consumer
+message MergedInbox {
+  string consumer_id = 1;
+  repeated string inbox_ids = 2;
+  string representative_inbox_id = 3; // pick doc with max latest_at
+  string latest_interaction_id = 4;
+  string latest_snippet = 5;
+  double latest_at = 6;
+  string latest_direction = 7;
+  int32 total_unread_for_assignee = 8;
+  Consumer consumer = 9;  // New consumer information
+}
+
+// ---- New: filtering & pagination helpers ----
+message InboxQuery {
+  string key = 1;
+  google.protobuf.Any value = 2;
+}
+
+message Pagination {
+  // Cursor-based pagination using the sorted index (latest_at).
+  // Client supplies the last seen latest_at; server returns the next page with latest_at < last_basis.
+  double last_basis = 1;  // optional; 0 or unset = first page
+  int32 limit = 2;        // optional; server may default (e.g., 50) and cap
+}
+
+message GetMergedInboxRequest {
+  string business_id = 1;
+  InboxQuery query = 2;      // optional filters
+  Pagination page = 3;       // optional pagination
+}
+
+message GetMergedInboxResponse {
+  repeated MergedInbox inboxes = 1;
+  int32 total_count = 2;
+  bool success = 3;
+  string error_message = 4;
+
+  // Returned cursor for the next request; corresponds to the last item's latest_at in this page.
+  double last_basis = 5;     // unset/0 when no further pages
+}
+
+message InboxIds {
+  string inbox_ids = 1;
+}
+
+message ReadCountRequest {
+  repeated InboxIds inbox_ids = 1;
+  string business_id = 2;
+}
+
+message ReadCountResponse {
+  string message = 1;
+  bool success = 2;
+}
+
+// Service definition for inbox operations
+service InboxService {
+  // Get inbox entries by business ID
+  rpc GetInbox(GetInboxRequest) returns (GetInboxResponse);
+
+  // Get merged inbox entries grouped by consumer ID, with optional filters & pagination
+  rpc GetMergedInbox(GetMergedInboxRequest) returns (GetMergedInboxResponse);
+
+  rpc UpdateReadCount(ReadCountRequest) returns (ReadCountResponse);
+}

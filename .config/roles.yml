@@ -1,0 +1,113 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#      _____ __  __  ___    ____  _______     __      #
+#     |_   _|  \/  |/ _ \  |  _ \| ____\ \   / /      #
+#       | | | |\/| | | | | | | | |  _|  \ \ / /       #
+#       | | | |  | | |_| | | |_| | |___  \ V /        #
+#       |_| |_|  |_|\__\_\ |____/|_____|  \_/         #
+#                                                     #
+#        Roles and Features Configuration File        #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Roles Configuration
+client:
+  management:
+    # User Roles
+    # Permissions and features for each user role
+    # name: Role name
+    # level: Role level of hierarchy (higher level has more permissions)
+    # features: List of features available to the role
+    # inheritsFrom: List of roles this role inherits features from (optional)
+    userRoles:
+      - name: "normal"
+        level: 1
+        features:
+          - "userPage"
+
+      - name: "support"
+        level: 2
+        features:
+          - "supportDashboard"
+        inheritsFrom:
+          - "normal"
+
+      - name: "manager"
+        level: 2
+        features:
+          - "manageUsers"
+        inheritsFrom:
+          - "normal"
+
+      - name: "owner"
+        level: 3
+        features:
+          - "financialReports"
+        inheritsFrom:
+          - "manager"
+          - "support"
+
+      - name: "superuser"
+        level: 4
+        features:
+          - "systemConfig"
+        inheritsFrom:
+          - "owner"
+
+    # Package Roles
+    # Permissions and features for each package role
+    # name: Role name
+    # level: Role level of hierarchy (higher level has more permissions)
+    # features: List of features available to the role
+    packageRoles:
+      - name: "basic"
+        level: 1
+        features:
+          - "basicFeatures"
+
+      - name: "intermediate"
+        level: 2
+        features:
+          - "basicFeatures"
+          - "advancedFeatures"
+
+      - name: "enterprise"
+        level: 3
+        features:
+          - "basicFeatures"
+          - "advancedFeatures"
+          - "premiumFeatures"
+
+    # Features
+    # List of features available in the system
+    # name: Feature name (unique identifier for the feature)
+    # description: Detailed description of the feature's functionality
+    features:
+      - name: "userPage"
+        description: "Access to the user's personal page and basic account management"
+      - name: "supportDashboard"
+        description: "Access to the support dashboard for handling customer inquiries and issues"
+      - name: "manageUsers"
+        description: "Ability to manage user accounts, including creation, modification, and deletion"
+      - name: "financialReports"
+        description: "Access to detailed financial reports and analytics"
+      - name: "systemConfig"
+        description: "Access to system-wide configuration settings and advanced administrative tools"
+      - name: "basicFeatures"
+        description: "Core features available to all users, including basic functionality and essential tools"
+      - name: "advancedFeatures"
+        description: "Enhanced features providing additional functionality and improved user experience"
+      - name: "premiumFeatures"
+        description: "Exclusive high-end features offering maximum capability and customization"
+
+    # Quotas
+    # List of quantitative limits for different features
+    # feature: Feature name (should match a feature defined above)
+    # limits: Numerical limits for different package roles
+    #   basic: Limit for the basic package
+    #   intermediate: Limit for the intermediate package
+    #   enterprise: Limit for the enterprise package
+    quotas:
+      - feature: "noOfMessages"
+        limits:
+          basic: 5
+          intermediate: 20
+          enterprise: 100

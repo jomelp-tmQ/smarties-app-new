@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+message NullData { }
+
+enum Type {
+    ADD = 0;
+    CHANGE = 1;
+    DELETE = 2;
+}
+
+message Error {
+    int32 code = 1;
+    string message = 2;
+}
+
+message DefaultResponse {
+    bool success = 1;
+    Error error = 2;
+}
+
+message PublishResponse {
+    Type type = 1;
+    bytes data = 2;
+}
+
+message ConnectionInfo {
+    string userId = 1;
+    string connectionId = 2;
+    string clientAddress = 3;
+    string httpHeaders = 4;
+}
+
+message ObjectID {
+    string str = 1;
+}

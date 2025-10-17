@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+// Represents a browsing/engagement session (see imports/api/server/classes/dbTemplates/Sessions.js)
+message Session {
+  string id = 1;                    // _id as string
+  string external_session_id = 2;   // externalSessionId
+  string business_id = 3;           // ObjectId as string
+  string channel_id = 4;            // ObjectId as string
+  string consumer_id = 5;           // ObjectId as string
+  string inbox_id = 6;              // ObjectId as string
+  string status = 7;                // e.g. active, ended
+  double started_at = 8;            // epoch ms
+  double last_seen_at = 9;          // epoch ms
+  double ended_at = 10;             // epoch ms
+  int64 duration_ms = 11;           // duration in ms
+  int32 page_count = 12;            // number of pages visited
+  string referrer = 13;             // referrer url
+  string device = 14;               // device
+  string user_agent = 15;           // userAgent
+  double created_at = 16;           // epoch ms
+}
+
+// Page view entry (see imports/api/server/classes/dbTemplates/PageViews.js)
+message PageView {
+  string id = 1;            // _id as string
+  string session_id = 2;    // Session id (ObjectId as string)
+  string business_id = 3;   // ObjectId as string
+  string channel_id = 4;    // ObjectId as string
+  string consumer_id = 5;   // ObjectId as string
+  string inbox_id = 6;      // ObjectId as string
+  string type = 7;          // e.g., page
+  string path = 8;          // pathname
+  string title = 9;         // page title
+  int32 order = 10;         // sequence index
+  double timestamp = 11;    // epoch ms
+  int64 dwell_ms = 12;      // dwell time in ms
+  double created_at = 13;   // epoch ms
+}
+
+// ---- Requests / Responses ----
+
+message GetCurrentSessionRequest {
+  string business_id = 1;
+  string consumer_id = 2; // optional; if unset server may infer from inbox or auth
+}
+
+message GetCurrentSessionResponse {
+  repeated Session sessions = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+message GetPageViewsRequest {
+  string business_id = 1; // used as routing id for subscriptionManager
+  string session_id = 2;  // optional filter; if empty returns latest for business/consumer
+}
+
+message GetPageViewsResponse {
+  repeated PageView page_views = 1;
+  bool success = 2;
+  string error_message = 3;
+}
+
+// Service definition for session tracking operations
+service SessionService {
+  rpc GetCurrentSessions (GetCurrentSessionRequest) returns (GetCurrentSessionResponse);
+  rpc GetPageViews (GetPageViewsRequest) returns (GetPageViewsResponse);
+}
+
+

@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+import "tmq/common.proto";
+
+message ToolResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+enum ToolParameterType {
+    STRING = 0;
+    NUMBER = 1;
+    BOOLEAN = 2;
+    ARRAY = 3;
+    OBJECT = 4;
+}
+
+enum ToolMessageType {
+    REQUEST_START = 0;
+    REQUEST_COMPLETE = 1;
+    REQUEST_FAILED = 2;
+    REQUEST_RESPONSE_DELAYED = 3;
+}
+
+message ToolParameterProperties {
+    string name = 1;
+    ToolParameterType type = 2;
+    string description = 3;
+}
+
+message ToolParameters {
+    ToolParameterType type = 1;
+    repeated ToolParameterProperties properties = 2;
+    repeated string required_fields = 3;
+    bool additionalProperties = 4;
+}
+
+message ToolHeaders {
+    string key = 1;
+    string value = 2;
+}
+
+message ToolMessages {
+    ToolMessageType type = 1;
+    string content = 2;
+    repeated ToolMessages conditions = 3;
+}
+
+message ToolServerConfig {
+    string serverUrl = 1;
+    string secret = 2;
+    int32 timeout = 3;
+}
+
+message ToolRequest {
+    string name = 1;
+    string description = 2;
+    ToolParameters parameters = 3;
+    ToolServerConfig serverConfig = 4;
+    repeated ToolHeaders headers = 5;
+    repeated ToolMessages messages = 6;
+    bool async = 7;
+    bool strict = 8;
+    string userId = 9;
+    string id = 10;
+}
+
+message FetchToolsRequest {
+    string userId = 1;
+    int64 lastBasis = 2;
+    string searchQuery = 3;
+}
+
+message ToolFunction {
+    string name = 1;
+    string description = 2;
+    ToolParameters parameters = 3;
+    bool strict = 4;
+}
+
+message Tools {
+    string id = 1;
+    ToolServerConfig serverConfig = 2;
+    string type = 3;
+    ToolFunction function = 4;
+    repeated ToolMessages messages = 5;
+    repeated ToolHeaders headers = 6;
+    bool async = 7;
+    int64 createdAt = 8;
+    int64 updatedAt = 9;
+}
+
+message FetchToolsResponse {
+    repeated Tools tools = 1;
+    bool success = 2;
+    int64 lastBasis = 3;
+}
+
+service ToolService {
+    rpc createTool (ToolRequest) returns (DefaultResponse) {}
+    rpc fetchTools (FetchToolsRequest) returns (FetchToolsResponse) {}
+    rpc updateTools (ToolRequest) returns (DefaultResponse) {}
+}

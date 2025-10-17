@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+message PhoneResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message Capabilities {
+    bool voice = 1;
+    bool sms = 2;
+    bool mms = 3;
+}
+
+message PhoneRequest {
+    string userId = 1;
+    string number = 2;
+    string countryCode = 3;
+    string formattedNumber = 4;
+    Capabilities capabilities = 5;
+    string provider = 6;
+    string providerSid = 7;
+    string businessId = 8;
+    string status = 9;
+    int32 monthlyPrice = 10;
+}
+
+message Phone {
+    string userId = 1;
+    string number = 2;
+    string countryCode = 3;
+    string formattedNumber = 4;
+    Capabilities capabilities = 5;
+    string provider = 6;
+    string providerSid = 7;
+    string businessId = 8;
+    string status = 9;
+    int32 monthlyPrice = 10;
+    string id = 11;
+}
+
+message FetchPhoneRequest {
+    string userId = 1;
+}
+
+message FetchPhoneResponse {
+    repeated Phone phones = 1;
+    bool success = 2;
+}
+
+service PhoneService {
+    rpc createPhone (PhoneRequest) returns (PhoneResponse) {}
+    rpc fetchPhones (FetchPhoneRequest) returns (FetchPhoneResponse) {}
+}

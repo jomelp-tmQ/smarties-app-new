@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+message AccCustomerIdRequest {
+    string userId = 1;
+}
+
+message AccCustomerIdResponse {
+    bool success = 1;
+    string customerId = 2;
+}
+
+message Emails {
+    string address = 1;
+    string verified = 2; 
+}
+
+message Roles {
+    string userRole = 1;
+    string packageRole = 2;
+    int32 packageExpiresAt = 3;
+}
+
+message Profile {
+    string displayName = 1;
+    string email = 2;
+    string phone = 3;
+    string address = 4;
+    string city = 5;
+    string state = 6;
+    string zip = 7;
+    string country = 8;
+    string website = 9;
+    string avatar = 10;
+    string address2 = 11;
+    string nickName = 12;
+    Roles roles = 13;
+}
+
+message AccAccountResponse {
+    string id = 1;
+    string customerId = 2;
+    repeated Emails emails = 3;
+    string userName = 4;
+    Profile profile = 5;
+}
+
+message AccAccountRequest {
+    string userId = 1;
+}
+
+message UpdateAccountRequest {
+    string userId = 1;
+    string phone = 2;
+    string address = 3;
+    string currentPassword = 4;
+    string newPassword = 5;
+}
+
+message UpdateAccountResponse {
+    string success = 1;
+    bool message = 2;
+}
+
+
+service AccService {
+    rpc fetchCustomerId (AccCustomerIdRequest) returns (AccCustomerIdResponse) {}
+    rpc fetchAccountDetails (AccAccountRequest) returns (AccAccountResponse) {}
+    rpc updateAccountDetails (UpdateAccountRequest) returns (UpdateAccountResponse) {}
+}

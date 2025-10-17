@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+
+message CreateProductRequest {
+    string userId = 1;
+    string productName = 2;
+    string productDescription = 3;
+    string productCategory = 4;
+    string productPrice = 5;
+    string productImage = 6;
+    string brand = 7;
+    string instock = 8;
+}
+
+
+message UpdateProductRequest {
+    string productId = 1;
+    string userId = 2;
+    string productName = 3;
+    string productDescription = 4;
+    string productCategory = 5;
+    string productPrice = 6;
+    string productImage = 7;
+    string brand = 8;
+    string instock = 9;
+}
+
+message AllProducts {
+    string productId = 1;
+    string productName = 2;
+    string productDescription = 3;
+    string productCategory = 4;
+    string productPrice = 5;
+    string productImage = 6;
+    string brand = 7;
+    string instock = 8;
+    string userId = 9;
+}
+
+
+message FetchProductRequest {
+    string userId = 1;
+    int64 lastBasis = 2;
+}
+
+message FetchProductResponse {
+    repeated AllProducts products = 1;
+    int64 lastBasis = 2;
+}
+
+message DeleteProductRequest {
+    string userId = 1;
+    string productId = 2;
+}
+
+message ProductResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+
+
+service ProductService {
+    rpc createProduct (CreateProductRequest) returns (ProductResponse) {}
+    rpc updateProduct (UpdateProductRequest) returns (ProductResponse) {}
+    rpc fetchProduct (FetchProductRequest) returns (FetchProductResponse) {}
+    rpc deleteProduct (DeleteProductRequest) returns (ProductResponse) {}
+}

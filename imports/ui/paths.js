@@ -1,0 +1,32 @@
+// src/router/paths.js
+export const PATHS = {
+    home: "/",
+    login: "/login",
+    signup: "/signup",
+    messaging: "/messaging",
+    contacts: "/contacts",
+    admin: "/admin",
+    webCrawl: "/web-crawl",
+    journey: {
+        dashboard: "/journey/dashboard",
+        buzzBuilderHub: "/journey/buzz-builder-hub",
+        attractShoppers: "/journey/attract-shoppers",
+        convertBuyers: "/journey/convert-buyers",
+        buildLoyalty: "/journey/build-loyalty",
+        contentLibrary: "/journey/content-library",
+        policies: "/journey/policies",
+        objectionFeed: "/journey/objection-feed",
+        customerMemoryCenter: "/journey/customer-memory-center",
+    },
+    settings: {
+        account: "/settings/account",
+        billing: "/settings/billing",
+        assistant: "/settings/assistant",
+        phoneNumbers: "/settings/phone-numbers",
+        tools: "/settings/tools",
+        files: "/settings/files",
+        knowledgeBase: "/settings/knowledge-base",
+        widgetConfiguration: "/settings/widget-configuration",
+        dataEnrichment: "/settings/data-enrichment",
+    },
+};

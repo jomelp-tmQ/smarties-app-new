@@ -1,0 +1,166 @@
+{
+    "public": {
+        "scrapeApiKey": "sample-api-key",
+        "scrapeUrl": "http://localhost:8050",
+        "llmUrl": "https://llm.ph03.us",
+        "llmApiKey": "api-key-change-in-production",
+        "assistantId": "AS_68113d3d1d0fe180c828e12e",
+        "callAssistantPublicKey": "4ade29a8-cfd7-46bc-beae-475019bb448a",
+        "siteId": "site_ac87126b820bd771",
+        "callManagerConfig": {
+            "serverUrl": "https://callmanager.ph03.us",
+            "apiKey": "your-client-api-key"
+        },
+        "widgetConfig": {
+            "serverUrl": "https://widget.ph05.us/"
+        },
+        "vmConfig": {
+            "serverUrl": "https://vpmanager.ph03.us",
+            "apiKey": "abc123",
+            "refreshEndpoint": "/auth/token"
+        },
+        "websiteVerifier": {
+            "serverUrl": "https://webvalidator.ph03.us",
+            "apiKey": "your-client-api-key-change-in-production"
+        },
+        "unleash": {
+            "url": "http://localhost:4242/api/frontend/",
+            "clientKey": "*:development.f0c7a6d47f7d7b7f00a3601b3da74895c55bd395d33602c3fd344713",
+            "refreshInterval": 15,
+            "appName": "smarties"
+        },
+        "toolsUrl": "https://toolsmanager.ph03.us",
+        "toolsJwtApiKey": "abc123",
+        "uploadConfig": {
+            "config": {
+                "maxFileSize": 52428800,
+                "singleFile": true,
+                "supportedTypes": [
+                    "application/pdf",
+                    "image/jpeg",
+                    "image/png",
+                    "image/gif",
+                    "image/bmp",
+                    "image/tiff",
+                    "image/webp",
+                    "image/heic",
+                    "image/heif",
+                    "image/heic-sequence",
+                    "image/heif-sequence",
+                    "txt",
+                    "pdf"
+                ],
+                "baseUrl": "https://uploadmanager.ph03.us",
+                "maxCacheSize": 52428800,
+                "enableCache": true,
+                "authConfig": {
+                    "apiKey": "abc123",
+                    "tokenRefreshInterval": 1000,
+                    "maxRetries": 3,
+                    "retryDelay": 1000,
+                    "refreshEndpoint": "/api/auth/token",
+                    "withCredentials": false,
+                    "timeout": 10000
+                }
+            }
+        }
+    },
+    "redisOplog": {
+        "redis": {
+            "port": 6379,
+            "host": "127.0.0.1"
+        },
+        "retryIntervalMs": 10000,
+        "mutationDefaults": {
+            "optimistic": true,
+            "pushToRedis": true
+        },
+        "debug": false
+    },
+    "widgetConfig": {
+        "serverUrl": "https://widget.ph05.us/",
+        "domain": "https://localhost:3000",
+        "call": {
+            "serverUrl": "https://widget.ph05.us/",
+            "apiKey": "your-client-api-key",
+            "token": "4ade29a8-cfd7-46bc-beae-475019bb448a",
+            "smartyUrl": "http://localhost:3000",
+            "assistantId": "",
+            "apiSecret": ""
+        },
+        "llm": {
+            "serverUrl": "https://n8n.ph01.us/webhook/completions",
+            "apiKey": "tmq",
+            "assistantId": "",
+            "apiSecret": "P@ssword1"
+        },
+        "tracker": {
+            "sessionsUrl": "https://musical-iguana-thoroughly.ngrok-free.app/api/b/{{slug}}/sessions",
+            "pageViewsUrl": "https://musical-iguana-thoroughly.ngrok-free.app/api/b/{{slug}}/page-views",
+            "apiKey": "",
+            "apiSecret": ""
+        }
+    },
+    "server": {
+        "wsPort": 3502,
+        "smartiesAssistant": {
+            "testUrl": "",
+            "productionUrl": "http://localhost:5678/webhook/2522bf0c-4e08-44ec-86bc-721b42a1716d"
+        },
+        "rabbitFile": {
+            "url": "https://rabbit-file.ph01.us"
+        }
+    },
+    "client": {
+        "smartiesAssistant": {
+            "isHumanUrl": "http://localhost:5678/webhook/bd163c42-c8e8-45a7-83e1-8bf8c829bf71"
+        },
+        "suggestion": {
+            "url": "/webhook/suggestions",
+            "min": 1,
+            "max": 1
+        }
+    },
+    "auth": {
+        "username": "tmq",
+        "password": "P@ssword1"
+    },
+    "contentCreation": {
+        "baseURL": "http://localhost:3003"
+    },
+    "customerEngagement": {
+        "baseURL": "http://localhost:3004"
+    },
+    "salesEnablement": {
+        "baseURL": "http://localhost:3005"
+    },
+    "predefinedAnswer": {
+        "serverUrl": "http://localhost:6111",
+        "apiKey": "your-client-api-key-change-in-production",
+        "refreshEndpoint": "/auth/token"
+    },
+    "livekit": {
+        "serverUrl": "http://localhost:8007"
+    },
+    "knowledgeBase": {
+        "serverUrl": "https://kb.ph05.us/v1/ingest/files"
+    },
+    "widgetServer": {
+        "siteId": "site_396cd63b72064b8b",
+        "apiBase": "http://localhost:4001"
+    },
+    "crawl": {
+        "serverUrl": "http://localhost:50300/api/crawl"
+    },
+    "logger": {
+        "fluent": {
+            "host": "134.199.193.114",
+            "port": 24224,
+            "tag": "dev.app.smarties",
+            "label": "log",
+            "timeout": 3.0,
+            "reconnectInterval": 1000,
+            "async": true
+        }
+    }
+}

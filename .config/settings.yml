@@ -1,0 +1,190 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#      _____ __  __  ___    ____  _______     __      #
+#     |_   _|  \/  |/ _ \  |  _ \| ____\ \   / /      #
+#       | | | |\/| | | | | | | | |  _|  \ \ / /       #
+#       | | | |  | | |_| | | |_| | |___  \ V /        #
+#       |_| |_|  |_|\__\_\ |____/|_____|  \_/         #
+#                                                     #
+#               Main Configuration File               #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Server Host
+# Domain name where the server is hosted
+host: "https://neatly-musical-condor.ngrok-free.app"
+
+# Bind Ip address
+bindIP: "0.0.0.0"
+
+# Rabbit MQ Configuration
+# Configuration for Rabbit MQ connection
+#rabbitmq:
+#  url: "amqp://root:pass@localhost:5672"
+
+# ETCD Configuration
+# Set URL connection string
+etcd: "http://localhost:2379"
+
+# GRPC Configuration
+# namespace: keyword for grouping services
+# service: name for the service
+grpc: 
+  namespace: "/tmq-dev"
+  service: "tmq"
+
+# Mongo DB Configuration
+# batchSize: Limits the number of documents returned in one batch. It can be adjusted to optimize performance and limit data transfer.
+mongodb:
+  batchSize: 1000
+
+# Console Configuration
+# allowCMD: Allow command line interface to be used in the console
+console:
+  allowCMD: true
+
+# Google API Configuration
+# apiKey: Authentication key use to authorize Google APIs
+# credentials: Path to Google credentials file
+google:
+  apiKey: "AI************************************"
+  credentials: "google-credentials.json"
+
+# Billing Configuration
+billing:
+  # Stripe Configuration
+  # publishableKey: Stripe publishable key
+  # secretKey: Stripe secret key
+  stripe:
+    publishableKey: "pk_*****"
+    secretKey: "sk_*****"
+  # Payment History Configuration
+  # batchSize: Limits the number of documents returned in one batch.
+  paymentHistory:
+    batchSize: 50
+  # Invoice Configuration
+  # companyName: Company name to display on invoice
+  # companyAddress: Company address to display on invoice
+  # companyPhone: Company phone number to display on invoice
+  # companyEmail: Company email to display on invoice
+  # vat: Company VAT number to display on 
+  invoice:
+    companyName: "ABC Company"
+    companyAddress: "123 Main St, San Francisco, CA 94111"
+    companyPhone: "(415) 555-1234"
+    companyEmail: ""
+    vat: "123456789" 
+
+# Email Setup
+# host: Email server host
+# port: Email server port
+# mask: Used to mask or display sender name
+# auth:
+#   username: Email to used for authentication
+#   password: Emaill password to authenticate
+email:
+  host: ""
+  port: 26
+  mask: "noreply@localhost.io"
+  auth:
+    username: ""
+    password: ""
+
+# WebRTC Configuration
+# iceServer: List of STUN servers to use for ICE negotiation
+media:
+  iceServer:
+    - urls: "stun:stun.l.google.com:19302"
+    - urls: "stun:stun1.l.google.com:19302"
+
+# File Configuration
+# uploadRoute: Route to upload files
+# downloadRoute: Route to download files (use :fileid to specify file)
+# uploadLimit: Limit the size of files that can be uploaded
+# maxRequestSize: Limit the size of the request body
+# uploadDir: Directory to store uploaded files
+# allowUploadOnReferrerOnly: Allow file upload only on referrer
+# allowDownloadOnReferrerOnly: Allow file download only on referrer
+# maxAge: Maximum age of the file in seconds (default 1 day)
+routes:
+  uploadRoute: "/file/upload"
+  downloadRoute: "/file/download/:fileid"
+  uploadLimit: "15mb"
+  maxRequestSize: "20mb"
+  uploadDir: ".uploads"
+  allowUploadOnReferrerOnly: true
+  allowDownloadOnReferrerOnly: true
+  maxAge: 86400
+  # CORS Configuration
+  # enabled: Enable CORS for all routes
+  # origin: List of allowed origins (if cors is enabled)
+  # pathsExcludedFromCors: List of paths to exclude from CORS (if cors is enabled)
+  # pathsCorsApplied: List of paths to apply CORS (if cors is disabled)
+  cors:
+    enabled: true
+    origin:
+      - "http://localhost:3000"
+    pathsExcludedFromCors:
+      - "/file/download/:fileid"
+    pathsCorsApplied:
+      - "/file/upload"
+
+# Speech to Text Configuration
+# port: Port to use for speech to text
+# engine: Speech to text engine to use
+# enable: Enable speech to text service
+speechToText:
+  port: 4040
+  engine: "google"
+  enable: false
+  # Google Speech to Text Configuration
+  google:
+    # languageCode: Language code to use for speech recognition
+    # sampleRateHertz: Sample rate in Hertz (16000, 44100)
+    # encoding: Encoding format (LINEAR16, FLAC, MULAW, AMR, AMR_WB)
+    # timeout: Timeout in milliseconds
+    # punctuation: Enable punctuation is returned in the recognition result
+    # profanityFilter: Enable profanity filter
+    # enableWordTimeOffsets: Enable word time offsets is a feature that allows you to obtain the start and end time of each spoken word
+    languageCode: "en-US"
+    sampleRateHertz: 16000
+    encoding: "LINEAR16"
+    timeout: 60000
+    punctuation: true
+    profanityFilter: false
+    enableWordTimeOffsets: false
+
+# Text to Speech Configuration
+# engine: Text to speech engine to use
+# allowCaching: Allow caching of text to speech
+textToSpeech:
+  engine: "google"
+  allowCaching: true
+  dirCache: ".cache"
+  # Google Text to Speech Configuration
+  # enableTimePointing: Time pointing is a feature that allows you to specify the time at which a word or phrase should be spoken
+  # audioEncoding: Audio encoding format (OGG_OPUS, LINEAR16, MP3, MULAW)
+  google:
+    enableTimePointing: false
+    audioEncoding: "OGG_OPUS"
+
+assistant:
+  apiKey: "api-key-change-in-production"
+  serverUrl: "https://assistant.ph03.us"
+ 
+KB_CLIENT:
+  serverUrl: http://165.227.83.110:8002
+  apiKey: "your-client-api-key-change-in-production"
+  logLevel: 1
+  provider: milvus
+ 
+billingInfo:
+  apiUrl: "https://smartybilling.ph03.us/api"
+  apiKey: "your-super-secret-key-change-in-production"
+  returnUrl: "/billing"
+  cancelUrl: "/billing"
+  checkOutUrl: "/create-checkout-session"
+  sessionStatusUrl: "/session-status"
+  portalUrl: "/create-billing-portal-session"
+  stripePublicKey: "pk_test_51RCQf5GfNfqVfJn7ef0gBcGZw3E3etMuMg1IOMlmQBKr9I5VI44ss3n2xmmswp0WpYNQqg7ZIe7oawIKqVfxRxbW00suqfhfOz"
+app:
+  name: "Smarties-local"
+  url: "https://musical-iguana-thoroughly.ngrok-free.app"

@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+option optimize_for = CODE_SIZE;
+
+package tmq;
+import "google/protobuf/struct.proto";
+
+message Model {
+    string provider = 1;
+    string model = 2;
+}
+
+message Voice {
+    string provider = 1;
+    string voiceId = 2;
+    string name = 3;
+}
+
+message KnowledgeBase {
+    string provider = 1;
+    string id = 2;
+}
+
+message Transcriber {
+    string provider = 1;
+    string model = 2;
+    string language = 3;
+    bool smartFormat = 4;
+}
+
+message Tool {
+    string type = 1;
+    google.protobuf.Struct function = 2;
+    string name = 3;
+    string description = 4;
+    string serverUrl = 5;
+    string token = 6;
+    int32 timeout = 7;
+    map<string, string> headers = 8;
+    bool async = 9;
+    map<string, string> messages = 10;
+}
+
+message AssistantRequest {
+    string name = 1;
+    string userId = 2;
+    string businessId = 3;
+    string assistantId = 4;
+    string assistantIdLlm = 5;
+    Model model = 6;
+    Voice voice = 7;
+    google.protobuf.Struct metadata = 8;
+    string description = 9;
+    string firstMessage = 10;
+    string systemMessage = 11;
+    string serverUrl = 12;
+    Transcriber transcriber = 13;
+    repeated string serverMessages = 14;
+    repeated Tool tools = 15;
+    KnowledgeBase knowledgeBase = 16;
+}
+message AssistantResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+message FetchAssistantRequest {
+    int64 lastBasis = 1;
+    string keywords = 2;
+    string userId = 3;
+}
+
+message AllAssistants {
+    string id = 1;
+    string name = 2;
+    string userId = 3;
+    string businessId = 4;
+    string assistantId = 5;
+    string assistantIdLlm = 6;
+    Model model = 7;
+    Voice voice = 8;
+    google.protobuf.Struct metadata = 9;
+    int64 createdAt = 10;
+    int64 updatedAt = 11;
+    string description = 12;
+    string firstMessage = 13;
+    string systemMessage = 14;
+    string serverUrl = 15;
+    Transcriber transcriber = 16;
+    repeated string serverMessages = 17;
+    repeated Tool tools = 18;
+    KnowledgeBase knowledgeBase = 19;
+}
+
+message FetchAssistantResponse {
+   repeated AllAssistants assistants = 1;
+   int64 lastBasis = 2;
+}
+
+message AssistantConfigRequest {
+}
+
+message AssistantConfigResponse {
+    string apiKey = 1;
+    string serverUrl = 2;
+}
+
+message AllVoices {
+    string id = 1;
+    string name = 2;
+    string provider = 3;
+    string voiceId = 4;
+}
+
+message FetchVoicesRequest {
+    string voiceProvider = 1;
+}
+
+message FetchVoicesResponse {
+    repeated AllVoices voices = 1;
+}
+
+service AssistantService {
+    rpc createAssistant (AssistantRequest) returns (AssistantResponse) {}
+    rpc fetchAssistant (FetchAssistantRequest) returns (FetchAssistantResponse) {}
+    rpc updateAssistant (AssistantRequest) returns (AssistantResponse) {}
+    rpc fetchAssistantConfig (AssistantConfigRequest) returns (AssistantConfigResponse) {}
+    rpc fetchVoices (FetchVoicesRequest) returns (FetchVoicesResponse) {}
+}
