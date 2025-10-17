@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Toaster } from 'sonner';
+import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import Index from '../pages/messaging';
 import Lottie from 'lottie-react';
@@ -19,6 +20,9 @@ import DurationtooltipItem from '../pages/custom/DurationtooltipItem';
 import MessaginginboxtextcontentbotItem_6121060c from '../pages/custom/MessaginginboxtextcontentbotItem_6121060c';
 import MessaginginboxitemrightItem_d2b9f097 from '../pages/custom/MessaginginboxitemrightItem_d2b9f097';
 import MessagingtablinkItem_69d9c18b from '../pages/custom/MessagingtablinkItem_69d9c18b';
+import TabsmenulinksidecolumnItem from '../pages/custom/TabsmenulinksidecolumnItem';
+import SessionsummarycolItem from '../pages/custom/SessionsummarycolItem';
+import AssetitemItem from '../pages/custom/AssetitemItem';
 
 function DeepEnhancer({ component: Component, enhancements }) {
     const interceptRender = (element) => {
@@ -1244,11 +1248,1013 @@ export default function MessagingCentralize() {
         },
     };
 
+    // CONTACT SIDE COLUMN
+    const contactSideEnhancements = {
+        '.contact-side-column': {
+            style: { display: messageList.length && !isDataEnrichmentSideColumn && !isDataEnrichmentProcessing && !isDataEnrichmentResult ? 'block' : 'none' }
+        },
+        '.tabs-menu-side-column': {
+            children: <>
+                <a
+                    data-w-tab={'Tab 1'}
+                    className={
+                        `tabs-menu-link-side-column w-inline-block w-tab-link ${activeCustomerInformationTab == 'profile' ? 'w--current' : ''}`
+                    }
+                    onClick={() => watcher.customerInformationTabChange('profile')}
+                >
+                    <div className={'icon-link-side-column'}>
+                        <img
+                            loading={'lazy'}
+                            src={'images/smartties-tab-profile.svg'}
+                            alt={''}
+                        />
+                    </div>
+                    <div>{'Profile'}</div>
+                </a>
+                <TabsmenulinksidecolumnItem
+                    dataWTab={'Tab 2'}
+                    src={'images/smartties-tab-journey.svg'}
+                    divText={'Journey'}
+                    isActive={activeCustomerInformationTab == 'journey'}
+                    onClick={() => watcher.customerInformationTabChange('journey')}
+                />
+                <TabsmenulinksidecolumnItem
+                    dataWTab={'Tab 3'}
+                    src={'images/smartties-tab-history.svg'}
+                    divText={'History'}
+                    isActive={activeCustomerInformationTab == 'history'}
+                    onClick={() => watcher.customerInformationTabChange('history')}
+                />
+                <TabsmenulinksidecolumnItem
+                    dataWTab={'Tab 4'}
+                    src={'images/smartties-tab-data.svg'}
+                    divText={'Data'}
+                    isActive={activeCustomerInformationTab == 'data'}
+                    onClick={() => watcher.customerInformationTabChange('data')}
+                />
+            </>
+        },
+        '.tabs-content-side-column': {
+            children: <>
+                <div
+                    data-w-tab={'Tab 1'}
+                    className={`tabs-pane-side-column w-tab-pane ${activeCustomerInformationTab == 'profile' ? 'w--tab-active' : ''}`}
+                >
+                    <div className={'side-column-profile'}>
+                        <div className={'data-enrichment-div'}>
+                            <div
+                                data-w-id={'420b0f02-28d9-8e15-64f3-0d8b5aa4b102'}
+                                className={'btn-date-enrichment'}
+                                onClick={() => setIsDataEnrichmentSideColumn(true)}
+                            >
+                                <div className={'icon-enrichment'}>
+                                    <img
+                                        loading={'lazy'}
+                                        src={'images/smarties-icon-enrichment.svg'}
+                                        alt={''}
+                                    />
+                                </div>
+                                <div>{'Data Enrichment'}</div>
+                                <div className={'tag-ai'}>{'AI-Powered'}</div>
+                            </div>
+                            <div className={'text-block-5'}>
+                                {'Auto-populate missing fields with external data'}
+                            </div>
+                        </div>
+                        <div className={'profile-tab-section'}>
+                            <div className={'side-column-section'}>
+                                <div className={'card-side-column'}>
+                                    <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b10e" className="card-side-column-hd">
+                                        <div>Contact Details</div>
+                                        <div className="side-column-arrow"><img loading="lazy" src="https://cdn.prod.website-files.com/6863b2cd9d992eee2240d5c5/6863b2cd9d992eee2240d603_vuesax%2Foutline%2Farrow-down.svg" alt /></div>
+                                    </div>
+                                    <div className={'card-side-column-content'}>
+                                        <div className={'profile-contact-details'}>
+                                            <div className="row-profile-contact-details">
+                                                <div className="icon-profile-contact-div">
+                                                    <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b117" className="icon-profile-contact"><img loading="lazy" src="/images/smarties-contact-email.svg" alt /></div>
+                                                    <div className="tooltip">Email Address</div>
+                                                </div>
+                                                <div className="profile-contact-info">
+                                                    <div>sarah.johnson@skytech.com</div>
+                                                </div>
+                                            </div>
+                                            <div className="row-profile-contact-details">
+                                                <div className="icon-profile-contact-div">
+                                                    <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b120" className="icon-profile-contact"><img loading="lazy" src="/images/smarties-contact-number.svg" alt /></div>
+                                                    <div className="tooltip">Phone Number</div>
+                                                </div>
+                                                <div className="profile-contact-info">
+                                                    <div>+1 (555) 123-4567</div>
+                                                </div>
+                                            </div>
+                                            <div className={'flex-contact-details'}>
+                                                <div className={'col-contact-details'}>
+                                                    <div className="col-contact-details">
+                                                        <div className="row-profile-contact-details">
+                                                            <div className="icon-profile-contact-div">
+                                                                <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b12b" className="icon-profile-contact"><img loading="lazy" src="/images/smarties-contact-ip.svg" alt /></div>
+                                                                <div className="tooltip">IP Address</div>
+                                                            </div>
+                                                            <div className="profile-contact-info hidden">
+                                                                <div>192.168.1.254</div>
+                                                            </div>
+                                                            <div className="contact-details-info-div">
+                                                                <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b133" className="icon-contact-info"><img loading="lazy" src="/images/smarties-icon-info.svg" alt /></div>
+                                                                <div className="tooltip long">Upgrade to see full enrichment data.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row-profile-contact-details">
+                                                            <div className="icon-profile-contact-div">
+                                                                <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b139" className="icon-profile-contact"><img loading="lazy" src="/images/smarties-contact-location.svg" alt /></div>
+                                                                <div className="tooltip">Location</div>
+                                                            </div>
+                                                            <div className="profile-contact-info">
+                                                                <div>San Francisco, CA</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row-profile-contact-details">
+                                                            <div className="icon-profile-contact-div">
+                                                                <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b142" className="icon-profile-contact"><img loading="lazy" src="/images/smarties-contact-weather.svg" alt /></div>
+                                                                <div className="tooltip">Weather</div>
+                                                            </div>
+                                                            <div className="profile-contact-info hidden">
+                                                                <div>72°F, Sunny</div>
+                                                            </div>
+                                                            <div className="contact-details-info-div">
+                                                                <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b14a" className="icon-contact-info"><img loading="lazy" src="/images/smarties-icon-info.svg" alt /></div>
+                                                                <div className="tooltip long">Upgrade to see full enrichment data.</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row-profile-contact-details">
+                                                        <div className="icon-profile-contact-div">
+                                                            <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b139" className="icon-profile-contact"><img loading="lazy" src="/images/smarties-contact-location.svg" alt /></div>
+                                                            <div className="tooltip">Location</div>
+                                                        </div>
+                                                        <div className="profile-contact-info">
+                                                            <div>San Francisco, CA</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row-profile-contact-details">
+                                                        <div className="icon-profile-contact-div">
+                                                            <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b142" className="icon-profile-contact"><img loading="lazy" src="/images/smarties-contact-weather.svg" alt /></div>
+                                                            <div className="tooltip">Weather</div>
+                                                        </div>
+                                                        <div className="profile-contact-info hidden">
+                                                            <div>72°F, Sunny</div>
+                                                        </div>
+                                                        <div className="contact-details-info-div">
+                                                            <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b14a" className="icon-contact-info"><img loading="lazy" src="/images/smarties-icon-info.svg" alt /></div>
+                                                            <div className="tooltip long">Upgrade to see full enrichment data.</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className={'location-preview'}>
+                                                    <div className={'details-sunny'}>
+                                                        <img
+                                                            loading={'lazy'}
+                                                            src={'images/smarties-icon-sunny.svg'}
+                                                            alt={''}
+                                                        />
+                                                    </div>
+                                                    <div
+                                                        data-w-id={
+                                                            '420b0f02-28d9-8e15-64f3-0d8b5aa4b151'
+                                                        }
+                                                        className={'button-location-expand'}
+                                                    >
+                                                        <div className={'icon-expand'}>
+                                                            <img
+                                                                loading={'lazy'}
+                                                                src={
+                                                                    'images/smarties-icon-expand.svg'
+                                                                }
+                                                                alt={''}
+                                                            />
+                                                        </div>
+                                                        <div>{'Expand'}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className={'location-expanded'}>
+                                                <img
+                                                    loading={'lazy'}
+                                                    src={
+                                                        'images/smarites-location-expanded.png'
+                                                    }
+                                                    alt={''}
+                                                />
+                                                <div className={'details-sunny'}>
+                                                    <img
+                                                        loading={'lazy'}
+                                                        src={'images/smarties-icon-sunny.svg'}
+                                                        alt={''}
+                                                    />
+                                                </div>
+                                                <div
+                                                    data-w-id={
+                                                        '420b0f02-28d9-8e15-64f3-0d8b5aa4b15a'
+                                                    }
+                                                    className={'button-location-minimize'}
+                                                >
+                                                    <div className={'icon-expand'}>
+                                                        <img
+                                                            loading={'lazy'}
+                                                            src={
+                                                                'images/smarties-icon-close-location.svg'
+                                                            }
+                                                            alt={''}
+                                                        />
+                                                    </div>
+                                                    <div>{'Minimize'}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={'side-column-section'}>
+                                <div className={'card-side-column'}>
+                                    <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b161" className="card-side-column-hd">
+                                        <div>Tags</div>
+                                        <div className="side-column-arrow"><img loading="lazy" src="https://cdn.prod.website-files.com/6863b2cd9d992eee2240d5c5/6863b2cd9d992eee2240d603_vuesax%2Foutline%2Farrow-down.svg" alt /></div>
+                                    </div>
+                                    <div className={'card-side-column-content'}>
+                                        <div className={'sidebar-tag-body'}>
+                                            <div className={'contact-tag'}>
+                                                <div>{'Marketing'}</div>
+                                                <div className={'tag-remove-icon'}>
+                                                    <img
+                                                        src={'images/smarties-popup-close.svg'}
+                                                        loading={'lazy'}
+                                                        alt={''}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className={'contact-tag bg-purple'}>
+                                                <div>{'Enterprise'}</div>
+                                                <div className={'tag-remove-icon'}>
+                                                    <img
+                                                        src={'images/smarties-popup-close.svg'}
+                                                        loading={'lazy'}
+                                                        alt={''}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className={'contact-tag bg-yellow'}>
+                                                <div>{'VIP'}</div>
+                                                <div className={'tag-remove-icon'}>
+                                                    <img
+                                                        src={'images/smarties-popup-close.svg'}
+                                                        loading={'lazy'}
+                                                        alt={''}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className={'contact-tag bg-green'}>
+                                                <div>{'Key Account'}</div>
+                                                <div className={'tag-remove-icon'}>
+                                                    <img
+                                                        src={'images/smarties-popup-close.svg'}
+                                                        loading={'lazy'}
+                                                        alt={''}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className={'contact-tag bg-add'}>
+                                                <div className={'tag-remove-icon'}>
+                                                    <img
+                                                        src={'images/smarties-icon-add-tag.svg'}
+                                                        loading={'lazy'}
+                                                        alt={''}
+                                                    />
+                                                </div>
+                                                <div>{'Add'}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={'side-column-section'}>
+                                <div className={'card-side-column'}>
+                                    <div data-w-id="f9e95120-0291-ae33-0e7f-b1c13dd5731c" className="card-side-column-hd">
+                                        <div>Account Details</div>
+                                        <div className="side-column-arrow"><img loading="lazy" src="https://cdn.prod.website-files.com/6863b2cd9d992eee2240d5c5/6863b2cd9d992eee2240d603_vuesax%2Foutline%2Farrow-down.svg" alt /></div>
+                                    </div>
+                                    <div className={'card-side-column-content'}>
+                                        <div className={'sidebar-acctdetails-body'}>
+                                            <div className={'sidebar-acctdetails-row'}>
+                                                <div className={'sidebar-acctdetails-label'}>
+                                                    {'Customer Since'}
+                                                </div>
+                                                <div className={'sidebar-acctdetails-data'}>
+                                                    {'Mar 2021'}
+                                                </div>
+                                            </div>
+                                            <div className={'sidebar-acctdetails-row'}>
+                                                <div className={'sidebar-acctdetails-label'}>
+                                                    {'Subscription'}
+                                                </div>
+                                                <div
+                                                    className={
+                                                        'sidebar-acctdetails-data bg-green'
+                                                    }
+                                                >
+                                                    {'Tiny'}
+                                                </div>
+                                            </div>
+                                            <div className={'sidebar-acctdetails-row'}>
+                                                <div className={'sidebar-acctdetails-label'}>
+                                                    {'Support Level'}
+                                                </div>
+                                                <div
+                                                    className={
+                                                        'sidebar-acctdetails-data bg-orange'
+                                                    }
+                                                >
+                                                    {'Premium'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={'side-column-section'}>
+                                <div className={'card-side-column'}>
+                                    <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b16e" className="card-side-column-hd">
+                                        <div>Assets</div>
+                                        <div className="side-column-arrow"><img loading="lazy" src="https://cdn.prod.website-files.com/6863b2cd9d992eee2240d5c5/6863b2cd9d992eee2240d603_vuesax%2Foutline%2Farrow-down.svg" alt /></div>
+                                    </div>
+                                    <div className={'card-side-column-content'}>
+                                        <div className={'asset-search-div'}>
+                                            <div>
+                                                <form action="/search" className="asset-search-div-2 w-form"><input className="asset-search w-input" maxLength={256} name="query" placeholder="Search…" type="search" id="search" required tmq="tmq-0059" /><input type="submit" className="search-button w-button" defaultValue="Search" tmq="tmq-0060" /></form>
+                                            </div>
+                                            <a href={'#'} className={'btn-upload w-button'}>
+                                                {'Upload'}
+                                            </a>
+                                        </div>
+                                        <div className={'asset-list'}>
+                                            {attachmentsList && attachmentsList.map((data, index) => {
+                                                let extension = data.fileExtension;
+                                                if (!data.fileExtension) extension = "none"
+                                                return (
+                                                    <AssetitemItem
+                                                        key={data._id}
+                                                        src={fetchIconsBasedOnExtension(extension)}
+                                                        divText={truncateText(data.originalName, 10)}
+                                                        divText1={'Added ' + moment(data.createdAt).format('DD MMM YYYY')}
+                                                        download={async () => {
+                                                            try {
+                                                                if (!data.recordingId) {
+                                                                    console.error('No recordingId available');
+                                                                    return;
+                                                                }
+                                                                let downloadUrl = `/api/b/download/${data.recordingId}`;
+                                                                const res = await fetch(downloadUrl);
+                                                                if (!res.ok) {
+                                                                    throw new Error(`Download failed: ${res.status}`);
+                                                                }
+
+                                                                const blob = await res.blob();
+                                                                const url = window.URL.createObjectURL(blob);
+                                                                const a = document.createElement('a');
+                                                                a.href = url;
+                                                                a.download = data.originalName || `attachment_${data._id}`;
+                                                                document.body.appendChild(a);
+                                                                a.click();
+                                                                document.body.removeChild(a);
+                                                                window.URL.revokeObjectURL(url);
+                                                            } catch (error) {
+                                                                console.error('Download failed:', error);
+                                                                alert(`Download failed: ${error.message}`);
+                                                            }
+                                                        }}
+                                                        deleteAttachment={async () => {
+                                                            await watcher.deleteAttachment(data);
+                                                        }}
+                                                    />
+                                                )
+                                            })}
+                                            <button onClick={async () => {
+                                                await watcher.fetchAttachmentsByInboxIds(watcher.getValue(INTERACTION.CURRENT).inboxIds, { append: true });
+                                            }}>Load More</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={'profile-stats'}>
+                            <div>{'Last Enrichment: 2 minutes ago'}</div>
+                            <div className={'text-block-6'}>
+                                {'2 suggestions available'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    data-w-tab={'Tab 2'}
+                    className={`tabs-pane-side-column w-tab-pane ${activeCustomerInformationTab == 'journey' ? 'w--tab-active' : ''}`}
+                >
+                    <div className={'side-column-journey'}>
+                        <div className={'journey-main-content dont-shrinkgrow'}>
+                            <div className={'card-live-session'}>
+                                <div className={'journey-top-hd'}>
+                                    <div>{'Current Session 1'}</div>
+                                    <div className={'tag-live'}>{session ? session.status : "inactive"}</div>
+                                </div>
+                                {session && mapSessionStatus(session)}
+                            </div>
+                            <div className={'side-column-section'}>
+                                <div className={'card-side-column'}>
+                                    <div data-w-id="420b0f02-28d9-8e15-64f3-0d8b5aa4b1d7" className="card-side-column-hd">
+                                        <div>Customer Journey</div>
+                                        <div className="side-column-arrow"><img loading="lazy" src="https://cdn.prod.website-files.com/6863b2cd9d992eee2240d5c5/6863b2cd9d992eee2240d603_vuesax%2Foutline%2Farrow-down.svg" alt /></div>
+                                    </div>
+                                    <div className={'card-side-column-content'}>
+                                        <div className={'customer-journey'}>
+                                            {rowJourney(pageViews)}
+                                            <div className={'line-journey'}></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={'journey-bot'}>
+                            <div className={'card-session-summary'}>
+                                <div className={'journey-top-hd'}>
+                                    <div>{'Session Summary'}</div>
+                                </div>
+                                <div className={'session-summary'}>
+                                    <SessionsummarycolItem
+                                        src={'images/smarties-icon-journey-page.svg'}
+                                        divText={session?.pageCount || 0}
+                                        divText1={'Pages Visited'}
+                                    />
+                                    <SessionsummarycolItem
+                                        src={'images/smarties-icon-journey-time.svg'}
+                                        divText={totalSessionTime(pageViews)}
+                                        divText1={'Total Time'}
+                                    />
+                                </div>
+                            </div>
+                            <div className={'card-previous-summary'}>
+                                <div>
+                                    <div className={'journey-top-hd'}>
+                                        <div>{'Previous Session'}</div>
+                                        <div className={'icon-small-2'}>
+                                            <img
+                                                loading={'lazy'}
+                                                src={'images/smarties-icon-right.svg'}
+                                                alt={''}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={'previous-session-info'}>
+                                        <div onClick={() => {
+                                            sessionWatcher.setCurrentSession({ ...sessionWatcher.Filters, currentSessionIdx: sessionWatcher.Filters.currentSessionIdx + 1, });
+                                        }}>
+                                            {previousSession ? `${moment(previousSession.createdAt).format('MMM D, YYYY, h:mm A')} • ${previousSession.pageCount} pages • ${totalSessionTime(pageViews)}` : 'No previous session'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    data-w-tab={'Tab 3'}
+                    className={`tabs-pane-side-column w-tab-pane ${activeCustomerInformationTab == 'history' ? 'w--tab-active' : ''}`}
+                >
+                    <div className={'side-column-history'}>
+                        <div className={'history-search-filter'}>
+                            <div>
+                                <div className={'history-search-div'}>
+                                    <div className={'history-search'}>
+                                        <form action="/search" className="asset-search-div-2 w-form"><input className="asset-search w-input" maxLength={256} name="query" placeholder="Search…" type="search" id="search" required tmq="tmq-0059" /><input type="submit" className="search-button w-button" defaultValue="Search" tmq="tmq-0060" /></form>
+                                    </div>
+                                    <div className={'a_inbox-filter-div'}>
+                                        <div
+                                            data-w-id={
+                                                'e9437ced-afb3-128d-601f-b209ddd0bb09'
+                                            }
+                                            className={'a_filter-btn'}
+                                        >
+                                            <img
+                                                loading={'lazy'}
+                                                src={'images/smarties-icon-filter_1.svg'}
+                                                alt={''}
+                                            />
+                                        </div>
+                                        <div className={'filter-popup history'}>
+                                            <div className={'w-form'}>
+                                                <form id="email-form" name="email-form" data-name="Email Form" method="get" data-wf-page-id="68a6ed699293ec31a61d4e86" data-wf-element-id="e9437ced-afb3-128d-601f-b209ddd0bb0d">
+                                                    <div className="filter-main-div flex">
+                                                        <div className="filter-main-column wide">
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">by Client</div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-10" id="checkbox-10" data-name="Checkbox 10" className="w-checkbox-input filtercheckbox" tmq="tmq-0005" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-10">Prospect</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-5" id="checkbox-5" data-name="Checkbox 5" className="w-checkbox-input filtercheckbox" tmq="tmq-0006" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-5">Client</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-4" id="checkbox-4" data-name="Checkbox 4" className="w-checkbox-input filtercheckbox" tmq="tmq-0007" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-4">Demo</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-3" id="checkbox-3" data-name="Checkbox 3" className="w-checkbox-input filtercheckbox" tmq="tmq-0008" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-3">Sales</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-3" id="checkbox-3" data-name="Checkbox 3" className="w-checkbox-input filtercheckbox" tmq="tmq-0008" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-3">Support</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-3" id="checkbox-3" data-name="Checkbox 3" className="w-checkbox-input filtercheckbox" tmq="tmq-0008" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-3">Issue</span></label></div>
+                                                                <div className="filter-group_row" />
+                                                                <div className="channel-sub">
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-8" id="checkbox-8" data-name="Checkbox 8" className="w-checkbox-input filtercheckbox" tmq="tmq-0009" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-8">SMS</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-9" id="checkbox-9" data-name="Checkbox 9" className="w-checkbox-input filtercheckbox" tmq="tmq-0010" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-9">Chat</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-2" id="checkbox-2" data-name="Checkbox 2" className="w-checkbox-input filtercheckbox" tmq="tmq-0011" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-2">OTT</span>
+                                                                        <div className="filterarrow"><img width={10} loading="lazy" alt src="https://uploads-ssl.webflow.com/63086fbe0343fac5859fb3d5/63086fbe0343fadebf9fb68f_a_media_16.svg" /></div>
+                                                                    </label></div>
+                                                                </div>
+                                                                <div className="channel-subsub">
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-8" id="checkbox-8" data-name="Checkbox 8" className="w-checkbox-input filtercheckbox" tmq="tmq-0012" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-8">Messenger</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-9" id="checkbox-9" data-name="Checkbox 9" className="w-checkbox-input filtercheckbox" tmq="tmq-0013" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-9">Twitter</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-9" id="checkbox-9" data-name="Checkbox 9" className="w-checkbox-input filtercheckbox" tmq="tmq-0013" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-9">WeChat</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-9" id="checkbox-9" data-name="Checkbox 9" className="w-checkbox-input filtercheckbox" tmq="tmq-0013" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-9">WhatsApp</span></label></div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">by Message Type</div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Chat</span></label><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Voice</span></label></div>
+                                                            </div>
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">by Status</div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Bot-Handled</span></label><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Agent-Handled</span></label><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Mixed</span></label></div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="filter-main-column wide">
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">Tag</div>
+                                                                <div className="filter-group_row">
+                                                                    <div className="tag-multi-select" />
+                                                                </div>
+                                                            </div>
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">by Timeframe</div>
+                                                                <div className="datefield_container"><input className="filter-text-field w-input" maxLength={256} name="First-Name-4" data-name="First Name 4" placeholder="2022-01-01" type="text" id="First-Name-4" required tmq="tmq-0015" />
+                                                                    <div className="datefield_dash">
+                                                                        <div className="customer-info-label">-</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="datefield_container"><input className="filter-text-field w-input" maxLength={256} name="First-Name-4" data-name="First Name 4" placeholder="2022-01-01" type="text" id="First-Name-4" required tmq="tmq-0015" />
+                                                                    <div className="datefield_dash opacity-zero">
+                                                                        <div className="customer-info-label">-</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div><div className="filter-main-div flex">
+                                                        <div className="filter-main-column wide">
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">by Client</div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-10" id="checkbox-10" data-name="Checkbox 10" className="w-checkbox-input filtercheckbox" tmq="tmq-0005" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-10">Prospect</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-5" id="checkbox-5" data-name="Checkbox 5" className="w-checkbox-input filtercheckbox" tmq="tmq-0006" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-5">Client</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-4" id="checkbox-4" data-name="Checkbox 4" className="w-checkbox-input filtercheckbox" tmq="tmq-0007" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-4">Demo</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-3" id="checkbox-3" data-name="Checkbox 3" className="w-checkbox-input filtercheckbox" tmq="tmq-0008" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-3">Sales</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-3" id="checkbox-3" data-name="Checkbox 3" className="w-checkbox-input filtercheckbox" tmq="tmq-0008" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-3">Support</span></label></div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-3" id="checkbox-3" data-name="Checkbox 3" className="w-checkbox-input filtercheckbox" tmq="tmq-0008" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-3">Issue</span></label></div>
+                                                                <div className="filter-group_row" />
+                                                                <div className="channel-sub">
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-8" id="checkbox-8" data-name="Checkbox 8" className="w-checkbox-input filtercheckbox" tmq="tmq-0009" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-8">SMS</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-9" id="checkbox-9" data-name="Checkbox 9" className="w-checkbox-input filtercheckbox" tmq="tmq-0010" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-9">Chat</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-2" id="checkbox-2" data-name="Checkbox 2" className="w-checkbox-input filtercheckbox" tmq="tmq-0011" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-2">OTT</span>
+                                                                        <div className="filterarrow"><img width={10} loading="lazy" alt src="https://uploads-ssl.webflow.com/63086fbe0343fac5859fb3d5/63086fbe0343fadebf9fb68f_a_media_16.svg" /></div>
+                                                                    </label></div>
+                                                                </div>
+                                                                <div className="channel-subsub">
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-8" id="checkbox-8" data-name="Checkbox 8" className="w-checkbox-input filtercheckbox" tmq="tmq-0012" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-8">Messenger</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-9" id="checkbox-9" data-name="Checkbox 9" className="w-checkbox-input filtercheckbox" tmq="tmq-0013" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-9">Twitter</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-9" id="checkbox-9" data-name="Checkbox 9" className="w-checkbox-input filtercheckbox" tmq="tmq-0013" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-9">WeChat</span></label></div>
+                                                                    <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-9" id="checkbox-9" data-name="Checkbox 9" className="w-checkbox-input filtercheckbox" tmq="tmq-0013" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-9">WhatsApp</span></label></div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">by Message Type</div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Chat</span></label><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Voice</span></label></div>
+                                                            </div>
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">by Status</div>
+                                                                <div className="filter-group_row"><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Bot-Handled</span></label><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Agent-Handled</span></label><label className="w-checkbox filtercheckbox_container"><input type="checkbox" name="checkbox-7" id="checkbox-7" data-name="Checkbox 7" className="w-checkbox-input filtercheckbox" tmq="tmq-0014" /><span className="filtercheckbox_label w-form-label" htmlFor="checkbox-7">Mixed</span></label></div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="filter-main-column wide">
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">Tag</div>
+                                                                <div className="filter-group_row">
+                                                                    <div className="tag-multi-select" />
+                                                                </div>
+                                                            </div>
+                                                            <div className="filter-group">
+                                                                <div className="filter-label">by Timeframe</div>
+                                                                <div className="datefield_container"><input className="filter-text-field w-input" maxLength={256} name="First-Name-4" data-name="First Name 4" placeholder="2022-01-01" type="text" id="First-Name-4" required tmq="tmq-0015" />
+                                                                    <div className="datefield_dash">
+                                                                        <div className="customer-info-label">-</div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="datefield_container"><input className="filter-text-field w-input" maxLength={256} name="First-Name-4" data-name="First Name 4" placeholder="2022-01-01" type="text" id="First-Name-4" required tmq="tmq-0015" />
+                                                                    <div className="datefield_dash opacity-zero">
+                                                                        <div className="customer-info-label">-</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="filter_bottom">
+                                                        <a href="#" className="popup-links text-red" tmq="tmq-0016">Clear all filters</a>
+                                                        <div className="filterbottom_right">
+                                                            <div className="filter-btn-div">
+                                                                <a href="#" className="btn-style1-2 w-inline-block" tmq="tmq-0017">
+                                                                    <div>Apply</div>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={'history-filter'}>
+                                <div className={'form-block-2 w-form'}>
+                                    <form
+                                        id={'email-form-2'}
+                                        name={'email-form-2'}
+                                        data-name={'Email Form 2'}
+                                        method={'get'}
+                                        className={'history-form'}
+                                        data-wf-page-id={'688b61ee631f6165f14725cd'}
+                                        data-wf-element-id={
+                                            '420b0f02-28d9-8e15-64f3-0d8b5aa4b23a'
+                                        }
+                                    >
+                                        <div className="row-form">
+                                            <div className="col-2-form">
+                                                <div className="select-field-div"><select id="field-2" name="field-2" data-name="Field 2" className="select-field-2 w-select">
+                                                    <option value>All Status</option>
+                                                    <option value="First">First choice</option>
+                                                    <option value="Second">Second choice</option>
+                                                    <option value="Third">Third choice</option>
+                                                </select></div>
+                                            </div>
+                                            <div className="col-2-form">
+                                                <div className="select-field-div"><select id="field-2" name="field-2" data-name="Field 2" className="select-field-2 w-select">
+                                                    <option value>Sort by Date</option>
+                                                    <option value="First">First choice</option>
+                                                    <option value="Second">Second choice</option>
+                                                    <option value="Third">Third choice</option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="history-list">
+                            <div className="card-customer-history">
+                                <div className="card-customer-history-hd">
+                                    <div className="card-customer-history-hd-left">
+                                        <div className="tag-status">active</div>
+                                        <div className="tag-type">
+                                            <div className="tag-type-icon"><img loading="lazy" src="/images/smarties-icon-bot.svg" alt /></div>
+                                            <div>Bot</div>
+                                        </div>
+                                    </div>
+                                    <div>Dec 15, 2024</div>
+                                </div>
+                                <div className="history-convo-name">
+                                    <div>Order Status Inquiry</div>
+                                </div>
+                                <div className="div-block-35">
+                                    <div>Hi, I'd like to check on my order..</div>
+                                </div>
+                                <div className="card-customer-history-bot">
+                                    <div className="div-block-36">
+                                        <div className="history-avatar"><img loading="lazy" src="/images/smarties-bot-avatar.svg" alt /></div>
+                                        <div>Handled by Bot</div>
+                                    </div>
+                                    <div className="card-inbox-tag">
+                                        <div className="tag-topic">Demo</div>
+                                        <div className="tag-topic">Sales</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card-customer-history">
+                                <div className="card-customer-history-hd">
+                                    <div className="card-customer-history-hd-left">
+                                        <div className="tag-status">active</div>
+                                        <div className="tag-type agent">
+                                            <div className="tag-type-icon"><img loading="lazy" src="/images/smarties-icon-agent.svg" alt /></div>
+                                            <div>Agent</div>
+                                        </div>
+                                    </div>
+                                    <div>Dec 15, 2024</div>
+                                </div>
+                                <div className="history-convo-name">
+                                    <div>Order Status Inquiry</div>
+                                </div>
+                                <div className="div-block-35">
+                                    <div>Hi, I'd like to check on my order..</div>
+                                </div>
+                                <div className="card-customer-history-bot">
+                                    <div className="div-block-36">
+                                        <div className="history-avatar"><img loading="lazy" src="/images/smarties-avatar-3.svg" alt /></div>
+                                        <div>Mike Chen</div>
+                                    </div>
+                                    <div className="card-inbox-tag">
+                                        <div className="tag-topic">Demo</div>
+                                        <div className="tag-topic">Sales</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card-customer-history">
+                                <div className="card-customer-history-hd">
+                                    <div className="card-customer-history-hd-left">
+                                        <div className="tag-status">active</div>
+                                        <div className="tag-type agent">
+                                            <div className="tag-type-icon"><img loading="lazy" src="/images/smarties-icon-agent.svg" alt /></div>
+                                            <div>Agent</div>
+                                        </div>
+                                    </div>
+                                    <div>Dec 15, 2024</div>
+                                </div>
+                                <div className="history-convo-name">
+                                    <div>Order Status Inquiry</div>
+                                </div>
+                                <div className="div-block-35">
+                                    <div>Hi, I'd like to check on my order..</div>
+                                </div>
+                                <div className="card-customer-history-bot">
+                                    <div className="div-block-36">
+                                        <div className="history-avatar"><img loading="lazy" src="/images/smarties-avatar-3.svg" alt /></div>
+                                        <div>Mike Chen</div>
+                                    </div>
+                                    <div className="card-inbox-tag">
+                                        <div className="tag-topic">Demo</div>
+                                        <div className="tag-topic">Sales</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={'history-stats'}>
+                            <div className={'history-stats-col'}>
+                                <div className={'history-stats-hd'}>{'12'}</div>
+                                <div>{'Conversations'}</div>
+                            </div>
+                            <div className={'history-stats-col'}>
+                                <div className={'history-stats-hd green'}>{'8'}</div>
+                                <div>{'Resolved'}</div>
+                            </div>
+                            <div className={'history-stats-col'}>
+                                <div className={'history-stats-hd blue'}>{'4.2'}</div>
+                                <div>{'Avg Rating'}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    data-w-tab={'Tab 4'}
+                    className={`tabs-pane-side-column w-tab-pane ${activeCustomerInformationTab == 'data' ? 'w--tab-active' : ''}`}
+                >
+                    <div className={'side-column-data'}>
+                        <div className={'journey-main-content'}>
+                            <div className={'acitivity-history-searchfilter'}>
+                                <div className={'data-search-wrap'}>
+                                    <div className={'search-formblock w-form'}>
+                                        <form
+                                            id={'wf-form-search-form'}
+                                            name={'wf-form-search-form'}
+                                            data-name={'search form'}
+                                            method={'get'}
+                                            data-wf-page-id={'688b61ee631f6165f14725cd'}
+                                            data-wf-element-id={
+                                                '9aaf37b2-a011-864e-493e-ccb9979ed0bd'
+                                            }
+                                        >
+                                            <div className={'form-body'}>
+                                                <div className={'form-row mb-0'}>
+                                                    <input
+                                                        className={'inbox-search w-input'}
+                                                        maxlength={'256'}
+                                                        name={'search-2'}
+                                                        data-name={'Search 2'}
+                                                        placeholder={'Search'}
+                                                        type={'text'}
+                                                        id={'search-2'}
+                                                        required
+                                                    />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div
+                                    data-w-id={'264814e3-50a2-8f20-b31d-ec3499d1bccc'}
+                                    className={'btnicon-add'}
+                                >
+                                    <img
+                                        src={'images/smarties-icon-add.svg'}
+                                        loading={'lazy'}
+                                        alt={''}
+                                    />
+                                </div>
+                            </div>
+                            <div className={'w-form'}>
+                                <form
+                                    id={'wf-form-form-datacollection'}
+                                    name={'wf-form-form-datacollection'}
+                                    data-name={'form-datacollection'}
+                                    method={'get'}
+                                    data-wf-page-id={'688b61ee631f6165f14725cd'}
+                                    data-wf-element-id={
+                                        '62432dc4-3998-68c5-310a-091a787ae285'
+                                    }
+                                >
+                                    <div className={'add-data-div'}>
+                                        <div className={'adddatadiv_formrow'}>
+                                            <div className={'adddatadiv_formcol'}>
+                                                <input
+                                                    className={'data-textfield w-input'}
+                                                    maxlength={'256'}
+                                                    name={'title'}
+                                                    data-name={'title'}
+                                                    placeholder={'Title'}
+                                                    type={'text'}
+                                                    id={'title'}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className={'adddatadiv_formcol'}>
+                                                <textarea
+                                                    id={'description'}
+                                                    name={'description'}
+                                                    maxlength={'5000'}
+                                                    data-name={'description'}
+                                                    placeholder={'Description'}
+                                                    className={'data-textarea w-input'}
+                                                ></textarea>
+                                            </div>
+                                            <div className={'adddatadiv_formcol'}>
+                                                <select
+                                                    id={'data-type'}
+                                                    name={'data-type'}
+                                                    data-name={'data type'}
+                                                    className={'data-selectfield w-select'}
+                                                >
+                                                    <option value={''}>{'Data Type'}</option>
+                                                    <option value={'First'}>
+                                                        {'Temporary'}
+                                                    </option>
+                                                    <option value={'Second'}>
+                                                        {'Permanent'}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className={'adddatadiv-btncontain'}>
+                                            <div className={'div-block-14'}>
+                                                <a
+                                                    data-w-id={
+                                                        'faf67c65-037e-bc5e-951e-f27278871811'
+                                                    }
+                                                    href={'#'}
+                                                    className={'link-text'}
+                                                >
+                                                    {'Cancel'}
+                                                </a>
+                                                <a
+                                                    href={'#'}
+                                                    className={'btn-small w-button'}
+                                                >
+                                                    {'Save'}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div className={'side-column-section'}>
+                                <div className={'card-side-column'}>
+                                    <div
+                                        data-w-id={'420b0f02-28d9-8e15-64f3-0d8b5aa4b2b5'}
+                                        className={'card-side-column-hd'}
+                                    >
+                                        <div className={'div-block-37'}>
+                                            <div className={'datacollection-text'}>
+                                                {
+                                                    'Customer requested a refund for the invoice discrepancy'
+                                                }
+                                            </div>
+                                            <div className={'tag-customer yellow'}>
+                                                {'Temporary'}
+                                            </div>
+                                        </div>
+                                        <div className={'side-column-arrow'}>
+                                            <img
+                                                loading={'lazy'}
+                                                src={
+                                                    'https://cdn.prod.website-files.com/6863b2cd9d992eee2240d5c5/6863b2cd9d992eee2240d603_vuesax%2Foutline%2Farrow-down.svg'
+                                                }
+                                                alt={''}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={'card-side-column-content'}>
+                                        <div className="data-collection-content">
+                                            <div className="row-data-collection">
+                                                <div className="row-data-collection-main">
+                                                    <div className="data-label">Referral Source</div>
+                                                    <div className="data-info">Google Search</div>
+                                                </div>
+                                                <div className="edit-data"><img loading="lazy" src="/images/smarties-icon-edit.svg" alt /></div>
+                                            </div>
+                                            <div className="row-data-collection">
+                                                <div className="row-data-collection-main">
+                                                    <div className="data-label">Budget Range</div>
+                                                    <div className="data-info">$10,000 - $25,000</div>
+                                                </div>
+                                                <div className="edit-data"><img loading="lazy" src="/images/smarties-icon-edit.svg" alt /></div>
+                                            </div>
+                                            <div className="row-data-collection">
+                                                <div className="row-data-collection-main">
+                                                    <div className="data-label">Current Interests</div>
+                                                    <div className="div-block-38">
+                                                        <div className="tag-customer blue">Enterprise Plan</div>
+                                                        <div className="tag-customer blue">API Access</div>
+                                                    </div>
+                                                </div>
+                                                <div className="edit-data"><img loading="lazy" src="/images/smarties-icon-edit.svg" alt /></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className={'card-side-column'}>
+                                    <div
+                                        data-w-id={'420b0f02-28d9-8e15-64f3-0d8b5aa4b2db'}
+                                        className={'card-side-column-hd'}
+                                    >
+                                        <div className={'div-block-37'}>
+                                            <div className={'datacollection-text'}>
+                                                {
+                                                    'Customer requested a refund for the invoice discrepancy'
+                                                }
+                                            </div>
+                                            <div className={'tag-customer'}>
+                                                {'Permanent'}
+                                            </div>
+                                        </div>
+                                        <div className={'side-column-arrow'}>
+                                            <img
+                                                loading={'lazy'}
+                                                src={
+                                                    'https://cdn.prod.website-files.com/6863b2cd9d992eee2240d5c5/6863b2cd9d992eee2240d603_vuesax%2Foutline%2Farrow-down.svg'
+                                                }
+                                                alt={''}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={'card-side-column-content'}>
+                                        <div className="data-collection-content">
+                                            <div className="row-data-collection">
+                                                <div className="row-data-collection-main">
+                                                    <div className="data-label">Company</div>
+                                                    <div className="data-info">TechNova Solutions</div>
+                                                </div>
+                                                <div className="edit-data"><img loading="lazy" src="/images/smarties-icon-edit.svg" alt /></div>
+                                            </div>
+                                            <div className="row-data-collection">
+                                                <div className="row-data-collection-main">
+                                                    <div className="data-label">Industry</div>
+                                                    <div className="data-info">Software &amp; Technology</div>
+                                                </div>
+                                                <div className="edit-data"><img loading="lazy" src="/images/smarties-icon-edit.svg" alt /></div>
+                                            </div>
+                                            <div className="row-data-collection">
+                                                <div className="row-data-collection-main">
+                                                    <div className="data-label">Number of Employees</div>
+                                                    <div className="data-info">250</div>
+                                                </div>
+                                                <div className="edit-data"><img loading="lazy" src="/images/smarties-icon-edit.svg" alt /></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>
+        }
+    }
+
     const enhancements = {
         ...animationsEnhancements,
         ...sidebarEnhancements,
         ...messagingHandlingEnhancements,
         ...inboxEnhancements,
+        ...contactSideEnhancements
     };
 
     return (
