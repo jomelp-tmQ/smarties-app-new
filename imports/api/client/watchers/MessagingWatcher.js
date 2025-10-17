@@ -979,7 +979,7 @@ class MessagingWatcher extends Watcher2 {
     }
 
     speak(text) {
-        if (!this.#tts) this.initializeSTTAndTTS();
+        this.#tts.initialize();
         this.#tts.speak(text);
     }
 

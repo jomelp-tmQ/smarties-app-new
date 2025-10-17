@@ -412,6 +412,7 @@ const MessageAudioPlayer = ({ recordingId }) => {
 };
 
 export default function MessagingCentralize() {
+    const navigate = useNavigate();
     // WATCHERS
     const watcher = useRef(MessagingWatcher).current;
     const sessionWatcher = useRef(SessionWatcher).current;

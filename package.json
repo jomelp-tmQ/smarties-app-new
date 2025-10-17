@@ -1,5 +1,5 @@
 {
-  "name": "smarties-app-new",
+  "name": "meteor-app",
   "private": true,
   "scripts": {
     "start": "meteor run",
@@ -25,14 +25,13 @@
     "@tmq-justin/widget-client": "^1.0.4",
     "@tmq-shawn/kb-client": "^1.0.5",
     "@tmq.paul/client-tts": "^1.0.7",
-    "@tmq.paul/pipecat-livekit-sdk": "^1.0.7",
+    "@tmq.paul/pipecat-livekit-sdk": "^1.0.9",
     "@tmq/logger": "^1.0.4",
     "@unleash/proxy-client-react": "^5.0.1",
     "axios": "^1.11.0",
     "billing-client": "^2.0.4",
     "connect-route": "^0.1.5",
     "info-finder-client": "^1.0.1",
-    "lottie-react": "^2.4.1",
     "lucide-react": "^0.536.0",
     "meteor-node-stubs": "^1.2.5",
     "moment": "^2.30.1",
@@ -54,7 +53,6 @@
       "client": "client/main.jsx",
       "server": "server/main.js"
     },
-    "testModule": "tests/main.js",
-    "modern": true
+    "testModule": "tests/main.js"
   }
 }
