@@ -94,7 +94,7 @@ class FileUploadWatcher extends Watcher2 {
                     progress: 0
                 });
 
-                const res = await axios.post(`/api/b/${this.#slug}/upload`, formData, {
+                const res = await axios.post(`/api/b/tmq.jomel/upload`, formData, {
                     // Do NOT set Content-Type manually; the browser will add the correct boundary
                     onUploadProgress: (progressEvent) => {
                         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);

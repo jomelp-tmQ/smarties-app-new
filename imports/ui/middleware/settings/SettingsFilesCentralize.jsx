@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import Index from '../../pages/settings/files';
 import Lottie from 'lottie-react';
 import { PATHS } from '../../paths';
+import FileUploader from '../../pages/custom/FileUploader';
+import { useWatcher } from '../../../api/client/Watcher2';
+import FileUploadWatcher from '../../../api/client/watchers/vapi/FileUploadWatcher';
+import TablerowItem_f70b8454 from '../../pages/custom/TablerowItem_f70b8454';
 
 function DeepEnhancer({ component: Component, enhancements }) {
     const interceptRender = (element) => {
@@ -85,6 +89,74 @@ function DeepEnhancer({ component: Component, enhancements }) {
 export default function SettingsFilesCentralize() {
     // WATCHERS
     const navigate = useNavigate();
+    const [currentSelected, setCurrentSelected] = useState(null);
+    const watcher = useRef(FileUploadWatcher).current;
+    const contentRef = useRef(null);
+    useWatcher(watcher);
+
+    const isLoading = watcher.getValue("isLoadingFiles");
+    const [files, setFiles] = useState([]);
+
+    useEffect(() => {
+        async function setupWatcher() {
+            try {
+                watcher.setValue("isLoadingFiles", true);
+                await watcher.fetchFiles({ append: false, limit: 20 });
+                watcher.filesListen();
+
+                // Initial load from Minimongo
+                const initial = await watcher.DB.find({}, { sort: { createdAt: -1 } }).fetch();
+                setFiles(Array.isArray(initial) ? initial : []);
+
+                // Subscribe to Minimongo changes
+                const unsubscribe = watcher.DB.onChange(async () => {
+                    const all = await watcher.DB.find({}, { sort: { createdAt: -1 } }).fetch();
+                    setFiles(Array.isArray(all) ? all : []);
+                });
+
+                return unsubscribe;
+            } catch (err) {
+                console.error(err);
+            } finally {
+                watcher.activateWatch();
+            }
+        }
+        let cleanupPromise = null;
+        if (watcher.BusinessId) {
+            cleanupPromise = setupWatcher();
+        }
+        return () => {
+            if (cleanupPromise) cleanupPromise.then(cleanup => cleanup?.());
+        };
+    }, [watcher.BusinessId]);
+
+    const loadMoreFiles = () => {
+        watcher.fetchFiles({ append: true });
+    };
+
+    const handleScroll = (e) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.target;
+        const nearBottom = scrollHeight - scrollTop - clientHeight < 20;
+        if (nearBottom && !isLoading) {
+            loadMoreFiles();
+        }
+    };
+
+    const renderFileSize = (size) => {
+        if (size) {
+            const sizeInBytes = size;
+
+            let displaySize = '';
+            if (sizeInBytes < 1024) {
+                displaySize = `${sizeInBytes} Bytes`;
+            } else {
+                const sizeInKB = Math.round(sizeInBytes / 1024);
+                displaySize = `${sizeInKB} KB`;
+            }
+            return displaySize;
+        }
+    };
+
 
     // ANIMATIONS
     const [lottieData0, setLottieData0] = useState(null);
@@ -239,9 +311,59 @@ export default function SettingsFilesCentralize() {
         '[tmq="tmq-0030"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.webCrawl) } },
     };
 
+    // UPLOADER
+    const uploaderEnhancements = {
+        '.file-upload-content': {
+            children: <FileUploader />
+        },
+        '.table-content': {
+            ref: contentRef,
+            style: { overflowY: 'auto', maxHeight: '300px' },
+            onScroll: handleScroll,
+            children: files && files.length ? files.map((file, index) => {
+                if (!file) return null;
+                if (file.name == "") return null;
+                if (!file.size) file.size = 0;
+                return <TablerowItem_f70b8454 key={index} file={file} onClick={() => setCurrentSelected(file)} isCurrent={currentSelected && currentSelected.id == file.id} />;
+            }) : "No files found"
+        },
+        '.mainbody-col': {
+            style: { display: currentSelected ? 'block' : 'none' },
+        },
+        '[tmq="tmq-0006"]': {
+            onClick: async () => {
+                try {
+                    if (!currentSelected.fileId) {
+                        console.error('No recordingId available');
+                        return;
+                    }
+                    let downloadUrl = `/api/b/download/${currentSelected.fileId}`;
+                    const res = await fetch(downloadUrl);
+                    if (!res.ok) {
+                        throw new Error(`Download failed: ${res.status}`);
+                    }
+
+                    const blob = await res.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = currentSelected.originalName || `attachment_${currentSelected._id}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                } catch (error) {
+                    console.error('Download failed:', error);
+                    alert(`Download failed: ${error.message}`);
+                }
+            }
+        }
+    };
+
     const enhancements = {
         ...animationsEnhancements,
-        ...sidebarEnhancements
+        ...sidebarEnhancements,
+        ...uploaderEnhancements
     };
 
     return (
