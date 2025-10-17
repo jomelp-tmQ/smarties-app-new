@@ -1,9 +1,13 @@
 // src/router/Router.jsx
-import React, { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import React, { Suspense } from "react";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { PATHS } from "./paths";
 
-// Your existing wrappers/middleware
+// Guards
+import PrivateRoute from "./PrivateRoute";
+import PublicRoute from "./PublicRoute";
+
+// Your middleware/pages
 import IndexCentralize from "./middleware/IndexCentralize";
 import JourneyDashboardCentralize from "./middleware/journey/JourneyDashboardCentralize";
 import ContactsCentralize from "./middleware/ContactsCentralize";
@@ -12,7 +16,7 @@ import JourneyBuzzBuilderCentralize from "./middleware/journey/JourneyBuzzBuilde
 import JourneyAttractShoppersCentralize from "./middleware/journey/JourneyAttractShoppersCentralize";
 import JourneyConvertBuyersCentralize from "./middleware/journey/JourneyConvertBuyersCentralize";
 import JourneyBuildLoyaltyCentralize from "./middleware/journey/JourneyBuildLoyaltyCentralize";
-import ContentLibrary from "./pages/journey/content-library";
+import JourneyContentLibraryCentralize from "./middleware/journey/JourneyContentLibraryCentralize";
 import JourneyObjectionFeedCentralize from "./middleware/journey/JourneyObjectionFeedCentralize";
 import JourneyCustomerMemoryCenterCentralize from "./middleware/journey/JourneyCustomerMemoryCenterCentralize";
 import SettingsAccountsCentralize from "./middleware/settings/SettingsAccountsCentralize";
@@ -24,11 +28,12 @@ import SettingsFilesCentralize from "./middleware/settings/SettingsFilesCentrali
 import SettingsKnowledgebaseCentralize from "./middleware/settings/SettingsKnowledgebaseCentralize";
 import SettingsWidgetConfigurationCentralize from "./middleware/settings/SettingsWidgetConfigurationCentralize";
 import SettingsDataEnrichmentCentralize from "./middleware/settings/SettingsDataEnrichmentCentralize";
-import AdminCentralize from "./middleware/AdminCentralize";
 import SettingsWebcrawlCentralize from "./middleware/settings/SettingsWebcrawlCentralize";
-import JourneyContentLibraryCentralize from "./middleware/journey/JourneyContentLibraryCentralize";
+import AdminCentralize from "./middleware/AdminCentralize";
 
-// Lazy pages (swap to real components as you add them)
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+
 function NotFound() {
     return <div style={{ padding: 24 }}>NOT FOUND</div>;
 }
@@ -38,57 +43,61 @@ export default function Router() {
         <BrowserRouter>
             <Suspense fallback={<div style={{ padding: 24 }}>Loading…</div>}>
                 <Routes>
-                    {/* Root & Auth */}
-                    <Route path={PATHS.home} element={<IndexCentralize />} />
-                    {/* <Route path={PATHS.login} element={<Login />} />
-                    <Route path={PATHS.signup} element={<Signup />} /> */}
-
-                    {/* Core */}
-                    <Route path={PATHS.messaging} element={<MessagingCentralize />} />
-                    <Route path={PATHS.contacts} element={<ContactsCentralize />} />
-
-                    {/* Journey */}
-                    <Route path="/journey">
-                        <Route path="dashboard" element={<JourneyDashboardCentralize />} />
-                        <Route path="buzz-builder-hub" element={<JourneyBuzzBuilderCentralize />} />
-                        <Route path="attract-shoppers" element={<JourneyAttractShoppersCentralize />} />
-                        <Route path="convert-buyers" element={<JourneyConvertBuyersCentralize />} />
-                        <Route path="build-loyalty" element={<JourneyBuildLoyaltyCentralize />} />
-                        <Route path="content-library" element={<JourneyContentLibraryCentralize />} />
-                        {/* <Route path="policies" element={<Policies />} /> */}
-                        <Route path="objection-feed" element={<JourneyObjectionFeedCentralize />} />
-                        <Route
-                            path="customer-memory-center"
-                            element={<JourneyCustomerMemoryCenterCentralize />}
-                        />
-                        {/* Default /journey -> dashboard */}
-                        <Route index element={<Navigate to="dashboard" replace />} />
+                    {/* ---------- PUBLIC ONLY ---------- */}
+                    <Route element={<PublicRoute><Outlet /></PublicRoute>}>
+                        <Route path={PATHS.login} element={<Login />} />
+                        <Route path={PATHS.signup} element={<Signup />} />
                     </Route>
 
-                    {/* Settings */}
-                    <Route path="/settings">
-                        <Route path="account" element={<SettingsAccountsCentralize />} />
-                        <Route path="billing" element={<SettingsBillingCentralize />} />
-                        <Route path="assistant" element={<SettingsAssistantCentralize />} />
-                        <Route path="phone-numbers" element={<SettingsPhonenumbersCentralize />} />
-                        <Route path="tools" element={<SettingsToolsCentralize />} />
-                        <Route path="files" element={<SettingsFilesCentralize />} />
-                        <Route path="knowledge-base" element={<SettingsKnowledgebaseCentralize />} />
-                        <Route
-                            path="widget-configuration"
-                            element={<SettingsWidgetConfigurationCentralize />}
-                        />
-                        <Route path="data-enrichment" element={<SettingsDataEnrichmentCentralize />} />
-                        {/* Default /settings -> account */}
-                        <Route index element={<Navigate to="account" replace />} />
+                    {/* ---------- PRIVATE (everything else) ---------- */}
+                    <Route element={<PrivateRoute><Outlet /></PrivateRoute>}>
+                        {/* Root & Core */}
+                        <Route path={PATHS.home} element={<IndexCentralize />} />
+                        <Route path={PATHS.messaging} element={<MessagingCentralize />} />
+                        <Route path={PATHS.contacts} element={<ContactsCentralize />} />
+
+                        {/* Journey */}
+                        <Route path="/journey">
+                            <Route path="dashboard" element={<JourneyDashboardCentralize />} />
+                            <Route path="buzz-builder-hub" element={<JourneyBuzzBuilderCentralize />} />
+                            <Route path="attract-shoppers" element={<JourneyAttractShoppersCentralize />} />
+                            <Route path="convert-buyers" element={<JourneyConvertBuyersCentralize />} />
+                            <Route path="build-loyalty" element={<JourneyBuildLoyaltyCentralize />} />
+                            <Route path="content-library" element={<JourneyContentLibraryCentralize />} />
+                            <Route path="objection-feed" element={<JourneyObjectionFeedCentralize />} />
+                            <Route
+                                path="customer-memory-center"
+                                element={<JourneyCustomerMemoryCenterCentralize />}
+                            />
+                            {/* Default /journey -> dashboard */}
+                            <Route index element={<Navigate to="dashboard" replace />} />
+                        </Route>
+
+                        {/* Settings */}
+                        <Route path="/settings">
+                            <Route path="account" element={<SettingsAccountsCentralize />} />
+                            <Route path="billing" element={<SettingsBillingCentralize />} />
+                            <Route path="assistant" element={<SettingsAssistantCentralize />} />
+                            <Route path="phone-numbers" element={<SettingsPhonenumbersCentralize />} />
+                            <Route path="tools" element={<SettingsToolsCentralize />} />
+                            <Route path="files" element={<SettingsFilesCentralize />} />
+                            <Route path="knowledge-base" element={<SettingsKnowledgebaseCentralize />} />
+                            <Route path="widget-configuration" element={<SettingsWidgetConfigurationCentralize />} />
+                            <Route path="data-enrichment" element={<SettingsDataEnrichmentCentralize />} />
+                            {/* Default /settings -> account */}
+                            <Route index element={<Navigate to="account" replace />} />
+                        </Route>
+
+                        {/* Admin & Utilities */}
+                        <Route path={PATHS.admin} element={<AdminCentralize />} />
+                        <Route path={PATHS.webCrawl} element={<SettingsWebcrawlCentralize />} />
+
+                        {/* Authenticated 404 */}
+                        <Route path="*" element={<NotFound />} />
                     </Route>
 
-                    {/* Admin & Utilities */}
-                    <Route path={PATHS.admin} element={<AdminCentralize />} />
-                    <Route path={PATHS.webCrawl} element={<SettingsWebcrawlCentralize />} />
-
-                    {/* 404 */}
-                    <Route path="*" element={<NotFound />} />
+                    {/* Unauthenticated fallthrough: send to login */}
+                    <Route path="*" element={<Navigate to={PATHS.login} replace />} />
                 </Routes>
             </Suspense>
         </BrowserRouter>
