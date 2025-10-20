@@ -44,7 +44,7 @@ const KnowledgeBase = () => {
               </div>
               <div className="table-cell-div _w-5" />
             </div>
-            <div className="table-content">
+            <div className="table-content" tmq="kb-list-content">
               <div data-w-id="61790036-d452-9f0a-b33d-0b85e1b47285" className="table-row">
                 <div className="table-cell-div stretch">
                   <div className="table-doctitle">

@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import Index from '../../pages/settings/knowledge-base';
 import Lottie from 'lottie-react';
 import { PATHS } from '../../paths';
+import { useWatcher } from '../../../api/client/Watcher2';
+import KnowledgeBaseWatcher from '../../../api/client/watchers/KnowledgeBaseWatcher';
+import { KNOWLEDGEBASE } from '../../../api/common/const';
+import moment from 'moment/moment';
+import Loader from '../../pages/custom/Loader';
+import AssignFileToKnowledgeBase from '../../pages/custom/AssignFileToKnowledgeBase';
 
 function DeepEnhancer({ component: Component, enhancements }) {
     const interceptRender = (element) => {
@@ -85,6 +91,53 @@ function DeepEnhancer({ component: Component, enhancements }) {
 export default function SettingsKnowledgebaseCentralize() {
     // WATCHERS
     const navigate = useNavigate();
+
+    const watcher = useRef(KnowledgeBaseWatcher).current;
+    const listRef = useRef(null);
+    const formRef = useRef(null);
+    useWatcher(watcher);
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isFetchingMore, setIsFetchingMore] = useState(false);
+
+    const knowledgeBase = watcher.Data;
+    const isLoading = watcher.getValue(KNOWLEDGEBASE.ISLOADING);
+    const currentSelectedKb = watcher.getValue(KNOWLEDGEBASE.CURRENTSELECTED);
+    const isCreateNewKnowledgeBaseOpen = watcher.getValue("createNewKnowledgeBase");
+    const isKnowledgeBasePopupOpen = watcher.getValue(KNOWLEDGEBASE.IS_KNOWLEDGE_BASE_POPUP_OPEN);
+    const isKnowledgeaseUrlPopupOpen = watcher.getValue(KNOWLEDGEBASE.IS_ADD_LINK_POPUP_OPEN);
+    const handleScroll = async (e) => {
+        const { scrollTop, scrollHeight, clientHeight } = e.target;
+
+        // Trigger only when close to bottom and not already loading
+        if (scrollHeight - scrollTop - clientHeight < 20 && !isLoading && !isFetchingMore) {
+            setIsFetchingMore(true);
+            try {
+                await watcher.fetchKnowledgeBase({ append: true });
+            } finally {
+                setIsFetchingMore(false);
+            }
+        }
+    };
+
+    const handleUploadSubmit = (formRef) => {
+        const selectedFiles = [];
+        // Use the FormData API to read checkbox values
+        const formData = new FormData(formRef.current);
+        for (const [key, value] of formData.entries()) {
+            if (value === 'on') {
+                selectedFiles.push(key); // key is the file name
+            }
+        }
+        switch (formRef.current.name) {
+            case 'file-form':
+                watcher.uploadKnowledgeBase(selectedFiles, [], "file");
+                break;
+            case 'url-form':
+                watcher.uploadKnowledgeBase([], selectedFiles, "url");
+                break;
+        }
+    };
 
     // ANIMATIONS
     const [lottieData0, setLottieData0] = useState(null);
@@ -239,16 +292,88 @@ export default function SettingsKnowledgebaseCentralize() {
         '[tmq="tmq-0033"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.webCrawl) } },
     };
 
+    const kbManagementEnhancements = {
+        '[tmq="kb-list-content"]': {
+            ref: listRef,
+            style: {
+                height: '400px',
+                overflowY: 'auto',
+                padding: '10px',
+                scrollBehavior: 'smooth'
+            },
+            onScroll: handleScroll,
+            children: isLoading ? <Loader /> :
+                knowledgeBase.length ? knowledgeBase.map((file, index) => (
+                    <div data-w-id="61790036-d452-9f0a-b33d-0b85e1b47285" className="table-row" key={index}>
+                        <div className="table-cell-div stretch">
+                            <div className="table-doctitle">
+                                <div className="table-fileicon"><img src="../images/smarties-file-dark.svg" loading="lazy" alt /></div>
+                                <div className="table-doctitle-text">{file.collectionname}</div>
+                            </div>
+                        </div>
+                        <div className="table-cell-div stretch">
+                            <div className="settings-sublabel">{file.collectionid}</div>
+                        </div>
+                        <div className="table-cell-div stretch">
+                            <div className="settings-sublabel">{moment(parseInt(file.createdat)).format('MM/DD/YYYY') || "May 6, 2025"}</div>
+                        </div>
+                        <div className="table-cell-div _w-5">
+                            <div className="table-menu"><img width={15} height={15} alt src="https://cdn.prod.website-files.com/681bd50cca2b1f41b87287dc/681cae0a45e15d21303356de_smarties-icon-menu.svg" loading="lazy" className="image-100" /></div>
+                        </div>
+                    </div>
+                )) : "No Knowledge Base Found"
+        },
+        '[data-w-id="05baf8d8-9541-fe79-48a2-6cb3c1831b04"]': {
+            onClick: () => watcher.setValue("createNewKnowledgeBase", true)
+        },
+        '[tmq="tmq-0044"]': {
+            style: { display: isCreateNewKnowledgeBaseOpen ? 'flex' : 'none' }
+        },
+        '#wf-form-knowledge-base-form': {
+            ref: formRef
+        },
+        '[tmq="tmq-0041"]': {
+            onClick: () => {
+                watcher.setValue("createNewKnowledgeBase", false);
+                formRef.current.reset();
+            }
+        },
+        '[tmq="tmq-0047"]': {
+            onClick: (e) => {
+                e.preventDefault();
+                watcher.setValue("createNewKnowledgeBase", false);
+                watcher.handlesubmitNewKnowledgeBase(formRef.current);
+                formRef.current.reset();
+            }
+        },
+        '[data-w-id="68c9648d-cea9-ff78-b2cb-57329e0c0bc9"]': {
+            onClick: () => watcher.setValue(KNOWLEDGEBASE.IS_KNOWLEDGE_BASE_POPUP_OPEN, true)
+        },
+        '[tmq="tmq-0003"]': {
+            style: { display: "none" }
+        },
+        '.property-icon': {
+            style: { display: "none" }
+        }
+    }
+
 
     const enhancements = {
         ...animationsEnhancements,
-        ...sidebarEnhancements
+        ...sidebarEnhancements,
+        ...kbManagementEnhancements
     };
 
     return (
         <div>
             <Toaster closeButton />
             <DeepEnhancer component={Index} enhancements={enhancements} />
+            <AssignFileToKnowledgeBase
+                isOpen={isKnowledgeBasePopupOpen}
+                onClose={() => watcher.setValue(KNOWLEDGEBASE.IS_KNOWLEDGE_BASE_POPUP_OPEN, false)}
+                currentSelected={currentSelectedKb}
+                onSubmit={handleUploadSubmit}
+            />
         </div >
     );
 }
