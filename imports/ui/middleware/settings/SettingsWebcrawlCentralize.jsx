@@ -4,6 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import Index from '../../pages/web-crawl';
 import Lottie from 'lottie-react';
 import { PATHS } from '../../paths';
+import { useWatcher } from '../../../api/client/Watcher2';
+import CrawlWatcher, { CRAWL_FORM, CRAWL_STATE } from '../../../api/client/watchers/CrawlWatcher';
+import UrlitemItem from '../../pages/custom/UrlitemItem';
+import moment from 'moment/moment';
 
 function DeepEnhancer({ component: Component, enhancements }) {
     const interceptRender = (element) => {
@@ -85,6 +89,21 @@ function DeepEnhancer({ component: Component, enhancements }) {
 export default function SettingsWebcrawlCentralize() {
     // WATCHERS
     const navigate = useNavigate();
+
+    const watcher = useRef(CrawlWatcher).current;
+    useWatcher(watcher);
+
+    useEffect(() => {
+        watcher.fetchCrawlRequests();
+        watcher.setValue(CRAWL_FORM.UPDATe_INTERVAL, 'weekly');
+    }, []);
+
+    const urlList = watcher.Url;
+    const pages = watcher.Pages;
+    const loadingPage = watcher.getValue(CRAWL_STATE.LOADING);
+    const currentSelected = watcher.getValue(CRAWL_STATE.SELECTED_CRAWL) || "";
+    const selectedUrl = urlList.find(u => u.id === watcher.getValue(CRAWL_STATE.SELECTED_CRAWL));
+    const urlStatus = selectedUrl?.status ? selectedUrl?.status : "PENDING";
 
     // ANIMATIONS
     const [lottieData0, setLottieData0] = useState(null);
@@ -239,10 +258,66 @@ export default function SettingsWebcrawlCentralize() {
         '[tmq="tmq-0033"]': { href: "", onClick: (e) => { e.preventDefault(); navigate(PATHS.webCrawl) } },
     };
 
+    const webcrawlEnhancements = {
+        '[data-w-id="1687704e-e675-467d-e072-c3d6b28a9605"]': {
+            onClick: (e) => watcher.submitCrawlForm(e)
+        },
+        '[tmq="tmq-0002"]': {
+            value: watcher.getValue(CRAWL_FORM.MAX_PAGES),
+            onChange: (e) => watcher.setValue(CRAWL_FORM.MAX_PAGES, e.target.value)
+        },
+        '[tmq="tmq-0003"]': {
+            value: watcher.getValue(CRAWL_FORM.DEPTH),
+            onChange: (e) => watcher.setValue(CRAWL_FORM.DEPTH, e.target.value)
+        },
+        '[tmq="tmq-0004"]': {
+            value: watcher.getValue(CRAWL_FORM.UPDATe_INTERVAL),
+            onChange: (e) => watcher.setValue(CRAWL_FORM.UPDATe_INTERVAL, e.target.value)
+        },
+        '.mainwidth-control': {
+            style: { display: "flex" }
+        },
+        '.inbox-list': {
+            children: urlList.length != 0 && urlList.map((item, index) => (
+                <UrlitemItem dataWId={'9bba86ca-9be5-99ad-ceca-b591f883646d'} urlName={item.url} onClick={() => watcher.setSelectedUrl(item.id)} currentSelected={currentSelected == item.id} />
+            ))
+        },
+        '.settings-title': {
+            children: `(${urlStatus}) ${selectedUrl?.url == undefined ? "" : selectedUrl?.url}`
+        },
+        '.table-content': {
+            children: pages && pages.length != 0 && pages.map((page, index) => (<div className="table-row">
+                <div className="table-cell-div stretch">
+                    <a href="#" className="table-subpages-url w-inline-block" tmq="tmq-0010">
+                        <div>{page.url}</div>
+                    </a>
+                </div>
+                <div className="table-cell-div stretch">
+                    <div className="settings-sublabel">{page.title}</div>
+                </div>
+                <div className="table-cell-div stretch">
+                    <div className="settings-sublabel">{moment(parseInt(page.createdAt)).format('M/D/YYYY, h:mm:ss A')}</div>
+                </div>
+                <div className="table-cell-div">
+                    <div
+                        className={`messaging-inbox-status-tag ${page.status.toLowerCase() === 'completed' ? '' : page.status.toLowerCase() === 'queued' ? 'bg-yellow' : 'bg-green'}`}
+                    >
+                        {page.status}
+                    </div>
+                </div>
+                <div className="table-cell-div _w-7">
+                    <div className={`switch-div ${!page.active && "off"}`} onClick={() => watcher.updateCrawlPages(page.id, !page.active)}>
+                        <div className="switch-control" />
+                    </div>
+                </div>
+            </div>))
+        }
+    }
 
     const enhancements = {
         ...animationsEnhancements,
-        ...sidebarEnhancements
+        ...sidebarEnhancements,
+        ...webcrawlEnhancements
     };
 
     return (

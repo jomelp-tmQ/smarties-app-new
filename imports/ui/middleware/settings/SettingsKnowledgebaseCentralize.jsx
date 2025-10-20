@@ -105,7 +105,6 @@ export default function SettingsKnowledgebaseCentralize() {
     const currentSelectedKb = watcher.getValue(KNOWLEDGEBASE.CURRENTSELECTED);
     const isCreateNewKnowledgeBaseOpen = watcher.getValue("createNewKnowledgeBase");
     const isKnowledgeBasePopupOpen = watcher.getValue(KNOWLEDGEBASE.IS_KNOWLEDGE_BASE_POPUP_OPEN);
-    const isKnowledgeaseUrlPopupOpen = watcher.getValue(KNOWLEDGEBASE.IS_ADD_LINK_POPUP_OPEN);
     const handleScroll = async (e) => {
         const { scrollTop, scrollHeight, clientHeight } = e.target;
 
@@ -354,7 +353,7 @@ export default function SettingsKnowledgebaseCentralize() {
         },
         '.property-icon': {
             style: { display: "none" }
-        }
+        },
     }
 
 
