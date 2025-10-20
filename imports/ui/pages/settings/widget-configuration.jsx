@@ -108,7 +108,7 @@ const WidgetConfiguration = () => {
                   <div className="widgetconfic-body-tabdiv">
                     <div data-current="Tab 1" data-easing="ease" data-duration-in={300} data-duration-out={100} className="activity-tabs w-tabs">
                       <div className="activity-tabsmenu w-tab-menu">
-                        <a data-w-tab="Tab 1" className="contactdetails-tablink w-inline-block w-tab-link w--current" tmq="tmq-0005">
+                        <a data-w-tab="Tab 1" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-0005">
                           <div className="icon-seo w-embed">
                             {/*?xml version="1.0" encoding="UTF-8"?*/}
                             <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -124,7 +124,7 @@ const WidgetConfiguration = () => {
                           </div>
                           <div>Appearance</div>
                         </a>
-                        <a data-w-tab="Tab 2" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-0006">
+                        <a data-w-tab="Tab 2" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-00066">
                           <div className="icon-seo w-embed">
                             {/*?xml version="1.0" encoding="UTF-8"?*/}
                             <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -137,7 +137,7 @@ const WidgetConfiguration = () => {
                           </div>
                           <div>Behavior</div>
                         </a>
-                        <a data-w-tab="Tab 3" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-0006">
+                        <a data-w-tab="Tab 3" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-00067">
                           <div className="icon-seo w-embed">
                             {/*?xml version="1.0" encoding="UTF-8"?*/}
                             <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -149,7 +149,7 @@ const WidgetConfiguration = () => {
                           </div>
                           <div>Triggers</div>
                         </a>
-                        <a data-w-tab="Tab 4" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-0006">
+                        <a data-w-tab="Tab 4" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-00068">
                           <div className="icon-seo w-embed">
                             {/*?xml version="1.0" encoding="UTF-8"?*/}
                             <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -161,7 +161,7 @@ const WidgetConfiguration = () => {
                           </div>
                           <div>Channels</div>
                         </a>
-                        <a data-w-tab="Tab 5" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-0006">
+                        <a data-w-tab="Tab 5" className="contactdetails-tablink w-inline-block w-tab-link" tmq="tmq-00069">
                           <div className="icon-seo w-embed">
                             {/*?xml version="1.0" encoding="UTF-8"?*/}
                             <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -175,7 +175,7 @@ const WidgetConfiguration = () => {
                         </a>
                       </div>
                       <div className="contactdetails-tabscontent w-tab-content">
-                        <div data-w-tab="Tab 1" className="contactdetails-tabpane w-tab-pane w--tab-active">
+                        <div data-w-tab="Tab 1" className="contactdetails-tabpane w-tab-pane">
                           <div className="activity-tabpane-div pt-20">
                             <div className="dataenrichment-control-group">
                               <div className="popup-form-hd-div align-center" tmq="tmq-0007">
@@ -412,7 +412,7 @@ const WidgetConfiguration = () => {
                             </div>
                           </div>
                         </div>
-                        <div data-w-tab="Tab 5" className="contactdetails-tabpane w-tab-pane">
+                        <div data-w-tab="Tab 5" className="contactdetails-tabpane w-tab-pane" tmq="integration-tab">
                           <div className="activity-tabpane-div pt-20">
                             <div className="dataenrichment-control-group">
                               <div className="popup-form-hd-div align-center" tmq="tmq-0035">
